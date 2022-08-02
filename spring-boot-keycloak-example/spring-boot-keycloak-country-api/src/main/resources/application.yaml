@@ -1,6 +1,6 @@
 spring:
   application:
-    name: spring-boot-keycloak-example
+    name: spring-boot-keycloak-country-api
   security:
     oauth2:
       resourceserver:
