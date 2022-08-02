@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: spring-boot-keycloak-example
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jws-algorithm: RS512
+          jwk-set-uri: http://localhost:8080/realms/spring-boot-keycloak/protocol/openid-connect/certs
+server:
+  port : 8085
+logging:
+  level:
+    org:
+      springframework:
+        security: INFO
