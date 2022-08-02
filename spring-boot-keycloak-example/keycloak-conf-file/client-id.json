@@ -1,5 +1,5 @@
 { 
-	"clientId": "spring-boot-keycloak-country-api",
+	"clientId": "spring-boot-keycloak-country-api-client",
 	"rootUrl": "http://localhost:8085",
 	"redirectUris": [
         "http://localhost:8085/*"
