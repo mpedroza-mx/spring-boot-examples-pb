@@ -3,7 +3,6 @@ package org.learning.spring.security;
 
 import com.nimbusds.jose.util.JSONObjectUtils;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
