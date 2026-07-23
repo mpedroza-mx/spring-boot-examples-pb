@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URL:mongodb://localhost:27017/}
+      database: "sample_mflix"
+server:
+  port: 7070
