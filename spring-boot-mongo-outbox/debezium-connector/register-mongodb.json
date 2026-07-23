@@ -3,7 +3,7 @@
     "config": {
         "connector.class" : "io.debezium.connector.mongodb.MongoDbConnector",
         "tasks.max" : "1",
-        "topic.prefix" : "dbserver1",
+        "topic.prefix" : "debeziumconnector",
         "mongodb.connection.string" : "mongodb://mongodb:27017/?replicaSet=rs0",
         "mongodb.user" : "debezium",
         "mongodb.password" : "dbz",
