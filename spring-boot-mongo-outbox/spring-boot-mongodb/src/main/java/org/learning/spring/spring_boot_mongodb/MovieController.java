@@ -8,7 +8,7 @@ import java.util.List;
 @RequestMapping("/api/movies")
 public class MovieController {
 
-    private MovieService movieService;
+    private final MovieService movieService;
 
 
     public MovieController(MovieService movieService) {
