@@ -151,9 +151,9 @@ services:
       connector-init:
         condition: service_completed_successfully
 
-  spring-boot-solr-search-service:
+  spring-boot-solr-movies-search-service:
     build:
-      context: ./spring-boot-solr-search-service
+      context: ./spring-boot-solr-movies-search-service
     ports:
       - 6060:6060
       - "6005:6005" # Debugging Port
@@ -164,4 +164,6 @@ services:
       solr:
         condition: service_healthy
       connector-init:
+        condition: service_completed_successfully
+      spring-boot-solr-indexer:
         condition: service_completed_successfully
