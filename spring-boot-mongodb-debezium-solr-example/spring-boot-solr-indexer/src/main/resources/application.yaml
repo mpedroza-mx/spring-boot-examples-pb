@@ -6,7 +6,7 @@ spring:
       uri: ${MONGODB_URL:mongodb://localhost:27017/}
       database: "sample_mflix"
   kafka:
-    bootstrap-servers: ${KAFKA_URL:localhost}:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
 app:
   solr_url: ${SOLR_URL:http://localhost:8983/solr/movies}
   kafka_topic: ${KAFKA_INPUT_TOPIC:MOVIE.events}
