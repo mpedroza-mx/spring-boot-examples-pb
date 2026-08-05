@@ -17,12 +17,6 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @GetMapping
-    public List<Movie> getAllMovies(){
-        return movieService.getMovies();
-    }
-
-
     @PostMapping
     public Movie createMovie(@RequestBody Movie newMovie){
 
