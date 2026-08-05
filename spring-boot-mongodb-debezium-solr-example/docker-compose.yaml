@@ -137,6 +137,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      connector-init:
+        condition: service_completed_successfully
 
   spring-boot-solr-indexer:
     build:
@@ -150,10 +152,14 @@ services:
       - SOLR_URL=http://solr:8983/solr/movies
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     depends_on:
+      mongodb:
+        condition: service_healthy
       solr:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      connector-init:
+        condition: service_completed_successfully
 
   spring-boot-solr-search-service:
     build:
@@ -167,5 +173,5 @@ services:
     depends_on:
       solr:
         condition: service_healthy
-      kafka:
-        condition: service_healthy
+      connector-init:
+        condition: service_completed_successfully
