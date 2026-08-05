@@ -120,9 +120,9 @@ services:
       retries: 10
       start_period: 30s
 
-  spring-boot-mongodb:
+  spring-boot-mongodb-movies-service:
     build:
-      context: ./spring-boot-mongodb
+      context: ./spring-boot-mongodb-movies-service
     ports:
       - 7070:7070
       - "4005:4005" # Debugging Port
