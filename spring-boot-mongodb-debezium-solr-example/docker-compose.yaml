@@ -119,24 +119,18 @@ services:
       timeout: 5s
       retries: 10
       start_period: 30s
-    depends_on:
-      mongodb:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
 
   spring-boot-mongodb:
     build:
       context: ./spring-boot-mongodb
     ports:
       - 7070:7070
+      - "4005:4005" # Debugging Port
     environment:
       MONGODB_URL: mongodb://mongodb:27017/
     depends_on:
-      mongodb:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
+      kafka-ui:
+        condition: service_started
       connector-init:
         condition: service_completed_successfully
 
@@ -146,17 +140,13 @@ services:
     ports:
       - "5005:5005" # Debugging Port
     environment:
-      - KAFKA_URL=kafka
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MONGODB_URL=mongodb://mongodb:27017/
       - KAFKA_INPUT_TOPIC=MOVIE.events
       - SOLR_URL=http://solr:8983/solr/movies
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     depends_on:
-      mongodb:
-        condition: service_healthy
       solr:
-        condition: service_healthy
-      kafka:
         condition: service_healthy
       connector-init:
         condition: service_completed_successfully
