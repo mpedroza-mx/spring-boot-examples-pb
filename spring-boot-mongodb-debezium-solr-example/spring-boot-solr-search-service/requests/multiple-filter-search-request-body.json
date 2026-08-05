@@ -1,0 +1,21 @@
+{
+  "query": "Future",
+  "filters": [
+    {
+      "field": "genres",
+      "operator": "IN",
+      "values": ["Comedy","Drama"]
+    },
+    {
+      "field": "title",
+      "operator": "EQUALS",
+      "value": "Future"
+    },
+    {
+      "field": "tomatoes.critic.rating",
+      "operator": "RANGE",
+      "from": "7",
+      "to": "8"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "query": "Hello",
+  "filters": [
+    {
+      "field": "year",
+      "operator": "EQUALS",
+      "value": "2012"
+    }
+  ]
+}

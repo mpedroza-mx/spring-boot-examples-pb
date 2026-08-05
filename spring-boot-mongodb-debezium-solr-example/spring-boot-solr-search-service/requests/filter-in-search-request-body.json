@@ -1,0 +1,10 @@
+{
+  "query": "Future",
+  "filters": [
+    {
+      "field": "genres",
+      "operator": "IN",
+      "values": ["Comedy","Drama"]
+    }
+  ]
+}

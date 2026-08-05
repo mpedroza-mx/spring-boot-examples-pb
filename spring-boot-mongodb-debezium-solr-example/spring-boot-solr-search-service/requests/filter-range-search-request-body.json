@@ -1,0 +1,11 @@
+{
+  "query": "Marry",
+  "filters": [
+    {
+      "field": "tomatoes.critic.rating",
+      "operator": "RANGE",
+      "from": "6",
+      "to": "8"
+    }
+  ]
+}

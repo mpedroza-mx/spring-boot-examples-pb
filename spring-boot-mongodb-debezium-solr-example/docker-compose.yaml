@@ -1,0 +1,171 @@
+services:
+
+  kafka:
+    image: apache/kafka:4.3.1
+    ports:
+      - 9092:9092
+      - 9093:9093
+    environment:
+      - CLUSTER_ID=oh-sxaDRTcyAr6pFRbXyzA
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_LISTENERS=PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=1
+    healthcheck:
+      test: [  "CMD", "/opt/kafka/bin/kafka-cluster.sh","cluster-id", "--bootstrap-server", "kafka:9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: debezium
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://connect:8083
+    depends_on:
+      kafka:
+        condition: service_healthy
+
+
+  connect:
+    build:
+      context: ./debezium-connector
+    ports:
+      - 8083:8083
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: connect
+      CONFIG_STORAGE_TOPIC: connect-configs
+      OFFSET_STORAGE_TOPIC: connect-offsets
+      STATUS_STORAGE_TOPIC: connect-status
+      CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      STATUS_STORAGE_REPLICATION_FACTOR: 1
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f -s http://connect:8083/connectors >/dev/null 2>&1"
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+
+
+  connector-init:
+    image: curlimages/curl
+    depends_on:
+      connect:
+        condition: service_healthy
+    volumes:
+      - ./debezium-connector/register-mongodb.json:/register-mongodb.json:ro
+    command: >
+      sh -c "
+      until curl -f http://connect:8083/; do
+        echo waiting for connect;
+        sleep 5;
+      done;
+      curl -X POST -H 'Accept:application/json' -H  'Content-Type:application/json' http://connect:8083/connectors -d @/register-mongodb.json"    
+
+  mongodb:
+    build:
+      context: ./mongodb
+    ports:
+      - 27018:27017
+    hostname: mongodb
+    environment:
+      MONGODB_USER: debezium
+      MONGODB_PASSWORD: dbz
+    healthcheck:
+      test: > 
+          mongosh --quiet --eval
+          "quit(db.getMongo().getDBNames().includes(\"sample_mflix\") ? 0 : 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  solr:
+    image: solr:9.4-slim
+    ports:
+      - 8983:8983
+    volumes:
+      - ./solr-server/configsets/movies:/opt/solr/configsets
+    command:
+      - solr-precreate
+      - movies
+      - /opt/solr/configsets
+    healthcheck:
+      test: ["CMD-SHELL",
+             "curl 'http://solr:8983/solr/movies/admin/ping' | grep '\"status\":\"OK\"' > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+
+  spring-boot-mongodb:
+    build:
+      context: ./spring-boot-mongodb
+    ports:
+      - 7070:7070
+    environment:
+      MONGODB_URL: mongodb://mongodb:27017/
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+
+  spring-boot-solr-indexer:
+    build:
+      context: ./spring-boot-solr-indexer
+    ports:
+      - "5005:5005" # Debugging Port
+    environment:
+      - KAFKA_URL=kafka
+      - MONGODB_URL=mongodb://mongodb:27017/
+      - KAFKA_INPUT_TOPIC=MOVIE.events
+      - SOLR_URL=http://solr:8983/solr/movies
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    depends_on:
+      solr:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+
+  spring-boot-solr-search-service:
+    build:
+      context: ./spring-boot-solr-search-service
+    ports:
+      - 6060:6060
+      - "6005:6005" # Debugging Port
+    environment:
+      - SOLR_URL=http://solr:8983/solr/movies
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:6005
+    depends_on:
+      solr:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy

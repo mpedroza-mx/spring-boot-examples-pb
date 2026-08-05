@@ -1,0 +1,25 @@
+{
+    "name": "outbox-connector",
+    "config": {
+        "connector.class" : "io.debezium.connector.mongodb.MongoDbConnector",
+        "tasks.max" : "1",
+        "topic.prefix" : "debeziumconnector",
+        "mongodb.connection.string" : "mongodb://mongodb:27017/?replicaSet=rs0",
+        "mongodb.user" : "debezium",
+        "mongodb.password" : "dbz",
+        "database.include.list" : "sample_mflix",
+        "collection.include.list": "sample_mflix.outboxevent",
+        "database.history.kafka.bootstrap.servers" : "kafka:9092",
+        "transforms" : "outbox",
+        "transforms.outbox.type" : "io.debezium.connector.mongodb.transforms.outbox.MongoEventRouter",
+        "transforms.outbox.route.topic.replacement" : "${routedByValue}.events",
+        "transforms.outbox.collection.expand.json.payload" : "true",
+        "transforms.outbox.collection.field.event.timestamp" : "timestamp",
+        "transforms.outbox.collection.fields.additional.placement" : "type:header:eventType",
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+
+        "key.converter.schemas.enable": "false",
+        "value.converter.schemas.enable": "false"
+    }
+}
