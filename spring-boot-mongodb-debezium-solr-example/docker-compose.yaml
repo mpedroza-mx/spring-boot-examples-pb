@@ -148,8 +148,6 @@ services:
     depends_on:
       solr:
         condition: service_healthy
-      connector-init:
-        condition: service_completed_successfully
 
   spring-boot-solr-movies-search-service:
     build:
@@ -164,6 +162,4 @@ services:
       solr:
         condition: service_healthy
       connector-init:
-        condition: service_completed_successfully
-      spring-boot-solr-indexer:
         condition: service_completed_successfully
