@@ -1,4 +1,4 @@
-# spring-boot-mongodb-debezium-solr-example
+# spring-boot-search-platform-example
 
 
 This is an example that includes several components used to create a search service that includes tools such as:
