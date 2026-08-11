@@ -8,7 +8,7 @@ COPY pom.xml .
 COPY src ./src
 
 #Build the application and skip tests for speed
-RUN mvn clean package -DskipTests
+RUN  --mount=type=cache,target=/root/.m2 mvn clean package -B -DskipTests
 
 # === Stage 2: Create the runtime image ===
 FROM eclipse-temurin:21-jre-jammy
