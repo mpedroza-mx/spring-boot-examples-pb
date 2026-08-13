@@ -4,19 +4,21 @@ services:
     image: apache/kafka:4.3.1
     ports:
       - 9092:9092
-      - 9093:9093
+      - 9094:9094
     environment:
       - CLUSTER_ID=oh-sxaDRTcyAr6pFRbXyzA
       - KAFKA_NODE_ID=1
       - KAFKA_PROCESS_ROLES=broker,controller
-      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
-      - KAFKA_LISTENERS=PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9094
+      - KAFKA_LISTENERS=PLAINTEXT://kafka:9092,CONTROLLER://kafka:9094
       - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
       - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
       - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
       - KAFKA_DEFAULT_REPLICATION_FACTOR=1
+    networks:
+      - search_network
     healthcheck:
       test: [  "CMD", "/opt/kafka/bin/kafka-cluster.sh","cluster-id", "--bootstrap-server", "kafka:9092"]
       interval: 10s
@@ -33,6 +35,8 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
       KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: debezium
       KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://connect:8083
+    networks:
+      - search_network
     depends_on:
       kafka:
         condition: service_healthy
@@ -62,6 +66,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - search_network
     depends_on:
       mongodb:
         condition: service_healthy
@@ -76,6 +82,8 @@ services:
         condition: service_healthy
     volumes:
       - ./debezium-connector/register-mongodb.json:/register-mongodb.json:ro
+    networks:
+      - search_network
     command: >
       sh -c "
       until curl -f http://connect:8083/; do
@@ -93,6 +101,8 @@ services:
     environment:
       MONGODB_USER: debezium
       MONGODB_PASSWORD: dbz
+    networks:
+      - search_network
     healthcheck:
       test: > 
           mongosh --quiet --eval
@@ -103,7 +113,7 @@ services:
       start_period: 20s
 
   solr:
-    image: solr:9.4-slim
+    image: solr:10.0.0
     ports:
       - 8983:8983
     volumes:
@@ -112,6 +122,8 @@ services:
       - solr-precreate
       - movies
       - /opt/solr/configsets
+    networks:
+      - search_network
     healthcheck:
       test: ["CMD-SHELL",
              "curl 'http://solr:8983/solr/movies/admin/ping' | grep '\"status\":\"OK\"' > /dev/null || exit 1"]
@@ -128,6 +140,8 @@ services:
       - "4005:4005" # Debugging Port
     environment:
       MONGODB_URL: mongodb://mongodb:27017/
+    networks:
+      - search_network
     depends_on:
       kafka-ui:
         condition: service_started
@@ -145,6 +159,8 @@ services:
       - KAFKA_INPUT_TOPIC=MOVIE.events
       - SOLR_URL=http://solr:8983/solr/movies
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    networks:
+      - search_network
     depends_on:
       solr:
         condition: service_healthy
@@ -158,8 +174,56 @@ services:
     environment:
       - SOLR_URL=http://solr:8983/solr/movies
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:6005
+    networks:
+      - search_network
     depends_on:
       solr:
         condition: service_healthy
       connector-init:
         condition: service_completed_successfully
+
+
+  prometheus:
+    image: prom/prometheus:v3.13.1
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+    networks:
+      - search_network
+    depends_on:
+      spring-boot-solr-movies-search-service:
+        condition: service_started
+
+  alertmanager:
+    image: prom/alertmanager:v0.33.1
+    ports:
+      - "9093:9093"
+    networks:
+      - search_network
+    volumes:
+      - ./prometheus-alert-manager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+
+
+  mailpit:
+    image: axllent/mailpit:v1.30
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    volumes:
+      - mailpit_data:/data
+    networks:
+      - search_network
+
+
+
+volumes:
+  prom_data:
+  mailpit_data:
+networks:
+  search_network:
+    driver: bridge

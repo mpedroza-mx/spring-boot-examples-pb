@@ -4,6 +4,15 @@ spring:
 
 server:
   port: 6060
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus"
+  metrics:
+    distribution:
+      percentiles-histograms:
+        http.server.requests: true
 app:
   solr_url: ${SOLR_URL:http://localhost:8983/solr/movies}
   solr_searchable_fields: [ awards.text, cast, countries, directors, fullPlot, genres, languages, plot, poster, rated, released, title, type ]

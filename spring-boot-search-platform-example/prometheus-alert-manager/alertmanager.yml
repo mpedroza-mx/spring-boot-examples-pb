@@ -1,0 +1,19 @@
+global:
+  smtp_smarthost: 'mailpit:1025'
+  smtp_from: 'search-platform@example.com'
+  smtp_require_tls: false
+
+
+route:
+  group_by: ['service','severity']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'email-receiver'
+
+receivers:
+  - name: 'email-receiver'
+    email_configs:
+      - to: 'support-team@example.com'
+        send_resolved: true
+        require_tls: false

@@ -1,0 +1,23 @@
+groups:
+  - name: spring_boot_solr_movies_search_service
+    rules:
+      - alert: spring_boot_solr_movies_search_service_up_down
+        expr: up{job="spring_boot_solr_movies_search_service"} == 0
+        for: 1m
+        labels:
+            service: spring_boot_solr_movies_search_service
+            severity: critical
+        annotations:
+            summary: "Spring Boot instance is down"
+            description: "The instance *{{ $labels.instance }}* has been offline for more than 1 minute."
+  - name: solr
+    rules:
+      - alert: solr_up_down
+        expr: up{job="solr"} == 0
+        for: 1m
+        labels:
+          service: solr
+          severity: critical
+        annotations:
+          summary: "Solr is down"
+          description: "The instance *{{ $labels.instance }}* has been offline for more than 1 minute."
