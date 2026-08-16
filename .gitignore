@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### load test logs and reports ###
+*.log
+*.jtl
+**/html-report/*
