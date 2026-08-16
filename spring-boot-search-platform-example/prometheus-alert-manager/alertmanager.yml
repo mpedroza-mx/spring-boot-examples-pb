@@ -11,9 +11,15 @@ route:
   repeat_interval: 4h
   receiver: 'email-receiver'
 
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
 receivers:
   - name: 'email-receiver'
     email_configs:
       - to: 'support-team@example.com'
         send_resolved: true
         require_tls: false
+        headers:
+          subject: '[{{ .Status | toUpper }}] Service Alert: {{ .CommonLabels.alertname }}'
+        html: '{{ template "email.custom" . }}'
