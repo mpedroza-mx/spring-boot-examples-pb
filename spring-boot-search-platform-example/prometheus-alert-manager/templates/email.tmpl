@@ -1,23 +1,32 @@
 {{ define "email.custom" }}
 <html>
+<head>
+    <style>
+
+        .custom_table table{
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .custom_table th,
+        .custom_table td{
+           border: 1px solid black;
+           padding: 8px
+        }
+    </style>
+</head>>
+
 <body style="font-family: Arial, sans-serif;">
 
-<div>
-    <table width="100%">
-        <tr>
-            <td><a href='{{ .ExternalURL }}'>View in Alert Manager</a></td>
-        </tr>
-    </table>
-</div>
+
 {{ if eq .Status "firing" }}
 <h2 style="color: #d32f2f;">Alerts Firing</h2>
-<table style="border-collapse: collapse; width: 100%;">
+<table class="custom_table">
     <thead>
     <tr style="background-color: #f5f5f5;">
         <th>Alert</th>
         <th>Instance</th>
         <th>Summary</th>
-        <th>Description</th>
+        <th>Severity</th>
         <th>Status</th>
         <th>Source</th>
     </tr>
@@ -39,7 +48,7 @@
         </td>
 
         <td>
-            {{ .Annotations.description }}
+            {{ .Labels.severity  }}
         </td>
 
         <td>
@@ -48,6 +57,7 @@
         <td>
             <a href="{{ .GeneratorURL }}">
                 View in Prometheus
+            </a>
         </td>
     </tr>
 
@@ -58,11 +68,12 @@
 
 {{ else }}
 <h2 style="color: #388e3c;">Alerts Resolved</h2>
-<table style="border-collapse: collapse; width: 100%;">
+<table class="custom_table">
     <thead>
     <tr style="background-color: #f5f5f5;">
         <th>Alert</th>
         <th>Instance</th>
+        <th>Severity</th>
         <th>Status</th>
         <th>Source</th>
     </tr>
@@ -80,11 +91,16 @@
         </td>
 
         <td>
+            {{ .Labels.severity }}
+        </td>
+
+        <td>
             {{ .Status }}
         </td>
         <td>
             <a href="{{ .GeneratorURL }}">
                 View in Prometheus
+            </a>
         </td>
     </tr>
 
@@ -94,6 +110,14 @@
 </table>
 
 {{ end }}
+
+<div>
+    <table width="100%">
+        <tr>
+            <td><a href='{{ .ExternalURL }}'>View in Alert Manager</a></td>
+        </tr>
+    </table>
+</div>
 </body>
 
 </html>
