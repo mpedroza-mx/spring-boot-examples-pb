@@ -7,6 +7,9 @@ This is an example that includes several components used to create a search serv
 * Debezium
 * Apache Solr
 * Springboot
+* Prometheus
+* Alertmanager
+* MailPit
 
 Here you can find a series of documents that explains how all this components interact to achieve this:
 
@@ -27,3 +30,7 @@ https://medium.com/@mpedroza-mx/create-a-spring-boot-indexer-for-apache-solr-b06
 Create a Search Service with Spring Boot and Apache Solr
 
 https://medium.com/@mpedroza-mx/create-a-search-service-with-spring-boot-and-apache-solr-67d05b810b72?sharedUserId=mpedroza-mx
+
+
+From Metrics to Alerts: Monitoring Spring Boot App with Prometheus and Alertmanager
+https://medium.com/@mpedroza-mx/from-metrics-to-alerts-monitoring-spring-boot-app-with-prometheus-and-alertmanager-246377c338c6?sharedUserId=mpedroza-mx
