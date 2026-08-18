@@ -20,7 +20,7 @@ services:
     networks:
       - search_network
     healthcheck:
-      test: [  "CMD", "/opt/kafka/bin/kafka-cluster.sh","cluster-id", "--bootstrap-server", "kafka:9092"]
+      test: [ "CMD", "/opt/kafka/bin/kafka-cluster.sh","cluster-id", "--bootstrap-server", "kafka:9092" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -104,9 +104,9 @@ services:
     networks:
       - search_network
     healthcheck:
-      test: > 
-          mongosh --quiet --eval
-          "quit(db.getMongo().getDBNames().includes(\"sample_mflix\") ? 0 : 1)"
+      test: >
+        mongosh --quiet --eval
+        "quit(db.getMongo().getDBNames().includes(\"sample_mflix\") ? 0 : 1)"
       interval: 10s
       timeout: 5s
       retries: 5
@@ -125,8 +125,8 @@ services:
     networks:
       - search_network
     healthcheck:
-      test: ["CMD-SHELL",
-             "curl 'http://solr:8983/solr/movies/admin/ping' | grep '\"status\":\"OK\"' > /dev/null || exit 1"]
+      test: [ "CMD-SHELL",
+              "curl 'http://solr:8983/solr/movies/admin/ping' | grep '\"status\":\"OK\"' > /dev/null || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -200,6 +200,7 @@ services:
       spring-boot-solr-movies-search-service:
         condition: service_started
 
+
   alertmanager:
     image: prom/alertmanager:v0.33.1
     ports:
@@ -237,7 +238,7 @@ services:
       - ./jmeter/loadTestFiles:/tests
     networks:
       - search_network
-    entrypoint: ["/bin/sh", "-c"]
+    entrypoint: [ "/bin/sh", "-c" ]
     command: >
       "rm -f /tests/results.jtl &&
       rm -rf /tests/html-report &&  
@@ -245,7 +246,6 @@ services:
       -t /tests/SearchAPILoadTest.jmx
       -l /tests/results.jtl
       -e -o /tests/html-report"
-
     depends_on:
       alertmanager:
         condition: service_started
