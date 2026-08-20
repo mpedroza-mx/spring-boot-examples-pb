@@ -201,6 +201,21 @@ services:
         condition: service_started
 
 
+  grafana:
+    image: grafana/grafana:13.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    networks:
+      - search_network
+    depends_on:
+      prometheus:
+        condition: service_started
+    restart: unless-stopped
+
+
   alertmanager:
     image: prom/alertmanager:v0.33.1
     ports:
@@ -253,6 +268,7 @@ services:
 volumes:
   prom_data:
   mailpit_data:
+  grafana_data:
 networks:
   search_network:
     driver: bridge
