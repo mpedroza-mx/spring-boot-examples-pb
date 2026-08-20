@@ -197,6 +197,8 @@ services:
     networks:
       - search_network
     depends_on:
+      solr:
+        condition: service_healthy
       spring-boot-solr-movies-search-service:
         condition: service_started
 
@@ -207,12 +209,10 @@ services:
       - "3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
     networks:
       - search_network
-    depends_on:
-      prometheus:
-        condition: service_started
     restart: unless-stopped
 
 
