@@ -33,4 +33,10 @@ https://medium.com/@mpedroza-mx/create-a-search-service-with-spring-boot-and-apa
 
 
 From Metrics to Alerts: Monitoring Spring Boot App with Prometheus and Alertmanager
+
 https://medium.com/@mpedroza-mx/from-metrics-to-alerts-monitoring-spring-boot-app-with-prometheus-and-alertmanager-246377c338c6?sharedUserId=mpedroza-mx
+
+From Metrics to Dashboards: Monitoring Spring Boot App with Prometheus and Grafana
+
+https://medium.com/@mpedroza-mx/from-metrics-to-dashboards-monitoring-spring-boot-app-with-prometheus-and-grafana-45ed64302762?sharedUserId=mpedroza-mx
+
