@@ -29,7 +29,7 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     ports:
-      - "8080:8080"
+      - "3030:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
@@ -152,6 +152,7 @@ services:
     build:
       context: ./spring-boot-solr-indexer
     ports:
+      - "8081:8081"
       - "5005:5005" # Debugging Port
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -256,9 +257,9 @@ services:
     entrypoint: [ "/bin/sh", "-c" ]
     command: >
       "rm -f /tests/results.jtl &&
-      rm -rf /tests/html-report &&  
+      rm -rf /tests/html-report &&
       jmeter -n
-      -t /tests/SearchAPILoadTest.jmx
+      -t /tests/SearchPlatformLoadTest.jmx
       -l /tests/results.jtl
       -e -o /tests/html-report"
     depends_on:
