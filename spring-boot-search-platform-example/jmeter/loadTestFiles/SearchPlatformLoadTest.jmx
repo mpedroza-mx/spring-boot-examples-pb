@@ -5,9 +5,11 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Variables definidas por el Usuario">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SearchThreadGroup">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SearchPlatformThreadGroup">
         <intProp name="ThreadGroup.num_threads">1000</intProp>
         <intProp name="ThreadGroup.ramp_time">10</intProp>
         <longProp name="ThreadGroup.duration">360</longProp>
@@ -67,6 +69,93 @@
       &quot;to&quot;: &quot;8&quot;&#xd;
     }&#xd;
   ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49586">200</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Movie" enabled="true">
+          <stringProp name="HTTPSampler.domain">spring-boot-mongodb-movies-service</stringProp>
+          <stringProp name="HTTPSampler.port">7070</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.path">/api/movies</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;plot&quot;: &quot;HelloMyMovie&quot;,&#xd;
+  &quot;genres&quot;: [&#xd;
+    &quot;Short&quot;,&#xd;
+    &quot;Western&quot;&#xd;
+  ],&#xd;
+  &quot;runtime&quot;: 11,&#xd;
+  &quot;cast&quot;: [&#xd;
+    &quot;A.C. Abadie&quot;,&#xd;
+    &quot;Gilbert M. &apos;Broncho Billy&apos; Anderson&quot;,&#xd;
+    &quot;George Barnes&quot;,&#xd;
+    &quot;Justus D. Barnes&quot;&#xd;
+  ],&#xd;
+  &quot;poster&quot;: &quot;https://m.media-amazon.com/images/M/MV5BMTU3NjE5NzYtYTYyNS00MDVmLWIwYjgtMmYwYWIxZDYyNzU2XkEyXkFqcGdeQXVyNzQzNzQxNzI@._V1_SY1000_SX677_AL_.jpg&quot;,&#xd;
+  &quot;title&quot;: &quot;The Great Train Robbery&quot;,&#xd;
+  &quot;fullplot&quot;: &quot;Among the earliest existing films in American cinema - notable as the first film that presented a narrative story to tell - it depicts a group of cowboy outlaws who hold up a train and rob the passengers. They are then pursued by a Sheriff&apos;s posse. Several scenes have color included - all hand tinted.&quot;,&#xd;
+  &quot;languages&quot;: [&#xd;
+    &quot;English&quot;&#xd;
+  ],&#xd;
+  &quot;released&quot;: &quot;1903-12-01T00:00:00.000+00:00&quot;,&#xd;
+  &quot;directors&quot;: [&#xd;
+    &quot;Edwin S. Porter&quot;&#xd;
+  ],&#xd;
+  &quot;rated&quot;: &quot;TV-G&quot;,&#xd;
+  &quot;awards&quot;: {&#xd;
+    &quot;wins&quot;: 1,&#xd;
+    &quot;nominations&quot;: 0,&#xd;
+    &quot;text&quot;: &quot;1 win.&quot;&#xd;
+  },&#xd;
+  &quot;lastupdated&quot;: &quot;2015-08-13 00:27:59.177000000&quot;,&#xd;
+  &quot;year&quot;: 1903,&#xd;
+  &quot;imdb&quot;: {&#xd;
+    &quot;rating&quot;: 7.4,&#xd;
+    &quot;votes&quot;: 9847,&#xd;
+    &quot;id&quot;: 439&#xd;
+  },&#xd;
+  &quot;countries&quot;: [&#xd;
+    &quot;USA&quot;&#xd;
+  ],&#xd;
+  &quot;type&quot;: &quot;movie&quot;,&#xd;
+  &quot;tomatoes&quot;: {&#xd;
+    &quot;viewer&quot;: {&#xd;
+      &quot;rating&quot;: 3.7,&#xd;
+      &quot;numReviews&quot;: 2559,&#xd;
+      &quot;meter&quot;: 75&#xd;
+    },&#xd;
+    &quot;fresh&quot;: 6,&#xd;
+    &quot;critic&quot;: {&#xd;
+      &quot;rating&quot;: 7.6,&#xd;
+      &quot;numReviews&quot;: 6,&#xd;
+      &quot;meter&quot;: 100&#xd;
+    },&#xd;
+    &quot;rotten&quot;: 0,&#xd;
+    &quot;lastUpdated&quot;: &quot;2015-08-13 00:27:59.177000000&quot;&#xd;
+  },&#xd;
+  &quot;num_mflix_comments&quot;: 0&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
