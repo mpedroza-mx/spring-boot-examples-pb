@@ -1,6 +1,7 @@
 package org.learning.spring.spring_boot_solr_indexer.entity.solr;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Builder;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,8 @@ public class MovieSolrEntity {
     private String year;
     private String lastUpdated;
     private MovieSolrEntity.TomatoesSolrEntity tomatoes;
+    @JsonProperty(value = "_version_")
+    private long version;
 
 
     @Data

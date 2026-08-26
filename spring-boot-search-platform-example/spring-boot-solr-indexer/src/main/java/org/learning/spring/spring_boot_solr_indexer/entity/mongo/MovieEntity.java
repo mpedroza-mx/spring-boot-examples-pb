@@ -1,5 +1,6 @@
 package org.learning.spring.spring_boot_solr_indexer.entity.mongo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Builder;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ public class MovieEntity {
     private List<String> writers;
     @Field(name = "_id")
     @Id
+    @JsonProperty("_id")
     private ObjectId id;
     @Field("fullplot")
     private String fullPlot;
