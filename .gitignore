@@ -36,3 +36,4 @@ build/
 *.log
 *.jtl
 **/html-report/*
+**/loadTestFiles/temp
