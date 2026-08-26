@@ -20,3 +20,9 @@ scrape_configs:
       wt: [ 'prometheus']
     static_configs:
       - targets: [ "solr:8983" ]
+    scrape_interval: 15s
+  - job_name: "spring_boot_solr_indexer"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "spring-boot-solr-indexer:8081" ]
+    scrape_interval: 15s

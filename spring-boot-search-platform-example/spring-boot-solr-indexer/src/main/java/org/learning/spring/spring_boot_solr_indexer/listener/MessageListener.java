@@ -1,5 +1,6 @@
 package org.learning.spring.spring_boot_solr_indexer.listener;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.solr.client.solrj.RemoteSolrException;
@@ -31,13 +32,17 @@ public class MessageListener {
     private final MovieMapper movieMapper;
     private final ObjectMapper objectMapper;
     private final AtomicInteger counter = new AtomicInteger(1);
+    private final MeterRegistry meterRegistry;
+
+
 
     private final Map<String, Function<ConsumerRecord<String,String>,MovieSolrEntity>> eventResolver = new HashMap<>();
 
-    public MessageListener(SolrMoviesRepository solrMoviesRepository, MovieMapper movieMapper, ObjectMapper objectMapper) {
+    public MessageListener(SolrMoviesRepository solrMoviesRepository, MovieMapper movieMapper, ObjectMapper objectMapper, MeterRegistry meterRegistry) {
         this.solrMoviesRepository = solrMoviesRepository;
         this.movieMapper = movieMapper;
         this.objectMapper = objectMapper;
+        this.meterRegistry = meterRegistry;
     }
 
     @PostConstruct
@@ -53,7 +58,8 @@ public class MessageListener {
             topics = "${app.kafka-topic}")
     public void consumeMessage(ConsumerRecord<String, String> record) throws SolrServerException, IOException {
        LOGGER.info("Record message: {}", record.toString());
-       MovieSolrEntity movieSolrEntity = eventResolver.get(new String (record.headers().lastHeader("eventType").value(), StandardCharsets.UTF_8))
+       String eventType = new String (record.headers().lastHeader("eventType").value(), StandardCharsets.UTF_8);
+       MovieSolrEntity movieSolrEntity = eventResolver.get(eventType)
                .apply(record);
         try {
             UpdateResponse updateResponse = solrMoviesRepository.sendDocuments(List.of(movieSolrEntity));
@@ -62,6 +68,7 @@ public class MessageListener {
                 throw new RuntimeException("Error while trying to add the documents");
             }
         }catch (RemoteSolrException rse){
+            meterRegistry.counter("spring-boot-solr-warnings","component", "MessageListener","eventType",eventType,"movieId",movieSolrEntity.getId(),"solrHttpCode", String.valueOf(rse.code())).increment();
             LOGGER.warn("We already have this movie in solr: {}",movieSolrEntity.getTitle());
         }
 
