@@ -26,7 +26,7 @@ import java.util.function.Function;
 
 @Component
 public class MessageListener {
-
+    private static final String MOVIE_CREATED_EVENT = "MovieCreated";
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageListener.class);
     private final SolrMoviesRepository solrMoviesRepository;
     private final MovieMapper movieMapper;
@@ -46,8 +46,8 @@ public class MessageListener {
     }
 
     @PostConstruct
-    void init(){
-        eventResolver.put("MovieCreated",(record->{
+    void init() {
+        eventResolver.put(MOVIE_CREATED_EVENT, (record -> {
             MovieSolrEntity movieSolrEntity = movieMapper.toMovieSolrEntity(objectMapper.readValue(record.value(), MovieEntity.class));
             movieSolrEntity.setVersion(-1L);
             return movieSolrEntity;
@@ -57,27 +57,24 @@ public class MessageListener {
     @KafkaListener(id = "spring-boot-solr-indexer",
             topics = "${app.kafka-topic}")
     public void consumeMessage(ConsumerRecord<String, String> record) throws SolrServerException, IOException {
-       LOGGER.info("Record message: {}", record.toString());
-       String eventType = new String (record.headers().lastHeader("eventType").value(), StandardCharsets.UTF_8);
-       MovieSolrEntity movieSolrEntity = eventResolver.get(eventType)
-               .apply(record);
+        LOGGER.info("Record message: {}", record.toString());
+        String eventType = new String(record.headers().lastHeader("eventType").value(), StandardCharsets.UTF_8);
+        MovieSolrEntity movieSolrEntity = eventResolver.get(eventType)
+                .apply(record);
         try {
             UpdateResponse updateResponse = solrMoviesRepository.sendDocuments(List.of(movieSolrEntity));
             if (updateResponse.getStatus() != 0) {
                 LOGGER.error("Error while trying to add the documents. Response status: {}", updateResponse.getStatus());
                 throw new RuntimeException("Error while trying to add the documents");
             }
-        }catch (RemoteSolrException rse){
-            meterRegistry.counter("spring-boot-solr-warnings","component", "MessageListener","eventType",eventType,"movieId",movieSolrEntity.getId(),"solrHttpCode", String.valueOf(rse.code())).increment();
-            LOGGER.warn("We already have this movie in solr: {}",movieSolrEntity.getTitle());
+        } catch (RemoteSolrException rse) {
+            meterRegistry.counter("spring-boot-solr-warnings", "component", "MessageListener", "eventType", eventType, "movieId", movieSolrEntity.getId(), "solrHttpCode", String.valueOf(rse.code())).increment();
+            LOGGER.warn("We already have this movie in solr: {}", movieSolrEntity.getTitle());
         }
 
-        if (counter.getAndIncrement() % 2 == 0) {
+        if (counter.getAndIncrement() % 2 == 0 && MOVIE_CREATED_EVENT.equals( eventType)) {
             throw new RuntimeException("Force to message redelivery");
         }
-
-
-
     }
 
 
