@@ -46,12 +46,10 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
         builder.applyConnectionString(connectionString)
                 .applicationName("sample-app-java-mflix")
                 .applyToConnectionPoolSettings(poolBuilder ->
-                    poolBuilder.maxSize(100)
-                           .minSize(10)
+                    poolBuilder.maxSize(200)
+                           .minSize(20)
                            .maxConnectionIdleTime(5, TimeUnit.MINUTES)
-                           .maxWaitTime(1, TimeUnit.SECONDS)
-                           .maintenanceInitialDelay(1, TimeUnit.MILLISECONDS)
-                           .maintenanceFrequency(1, TimeUnit.MILLISECONDS)
+                           .maxWaitTime(5, TimeUnit.SECONDS)
                 );
     }
 
