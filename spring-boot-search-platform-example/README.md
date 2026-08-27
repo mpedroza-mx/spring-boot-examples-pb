@@ -40,3 +40,9 @@ From Metrics to Dashboards: Monitoring Spring Boot App with Prometheus and Grafa
 
 https://medium.com/@mpedroza-mx/from-metrics-to-dashboards-monitoring-spring-boot-app-with-prometheus-and-grafana-45ed64302762?sharedUserId=mpedroza-mx
 
+Building an Idempotent Kafka Consumer with Spring Boot and Apache Solr: A Practical Approach
+
+https://medium.com/@mpedroza-mx/building-an-idempotent-kafka-consumer-with-spring-boot-and-apache-solr-a-practical-approach-3e284d108c87
+
+
+
