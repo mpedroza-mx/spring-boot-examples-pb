@@ -88,7 +88,7 @@ services:
       sh -c "
       until curl -f http://connect:8083/; do
         echo waiting for connect;
-        sleep 5;
+        sleep 2;
       done;
       curl -X POST -H 'Accept:application/json' -H  'Content-Type:application/json' http://connect:8083/connectors -d @/register-mongodb.json"    
 
@@ -160,6 +160,7 @@ services:
       - KAFKA_INPUT_TOPIC=MOVIE.events
       - SOLR_URL=http://solr:8983/solr/movies
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      - OLLAMA_URL=http://ollama:11434
     networks:
       - search_network
     depends_on:
@@ -265,6 +266,31 @@ services:
     depends_on:
       alertmanager:
         condition: service_started
+
+  ollama:
+    image: ollama/ollama:0.33.2
+    ports:
+      - "11434:11434"
+    restart: unless-stopped
+    networks:
+      - search_network
+
+  ollama-init:
+    image: curlimages/curl
+    volumes:
+      - ./ollama/pull-nomic-embed-text-model-request-body.json:/pull-nomic-embed-text-model-request-body.json:ro
+    depends_on:
+      ollama:
+        condition: service_started
+    networks:
+      - search_network
+    command: >
+      sh -c "
+      until curl -f http://ollama:11434/api/tags; do
+        echo waiting for ollama;
+        sleep 2;
+      done;
+      curl -X POST -H 'Accept:application/json' -H  'Content-Type:application/json' http://ollama:11434/api/pull -d @/pull-nomic-embed-text-model-request-body.json"    
 
 volumes:
   prom_data:
