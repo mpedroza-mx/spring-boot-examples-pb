@@ -1,0 +1,17 @@
+
+//Add vector field
+curl http://localhost:8983/solr/movies/schema -X POST -H 'Content-Type: application/json' -d '{
+    "add-field-type":{
+        "name": "ollama_vector_768",
+        "class": "solr.DenseVectorField",
+        "vectorDimension": 768,
+        "similarityFunction": "cosine"
+        "knnAlgorithm": "hnsw"
+    },
+    "add-field":{
+        "name": "vector",
+        "type": "ollama_vector_768",
+        "indexed": true,
+        "stored": true
+    }
+}'
