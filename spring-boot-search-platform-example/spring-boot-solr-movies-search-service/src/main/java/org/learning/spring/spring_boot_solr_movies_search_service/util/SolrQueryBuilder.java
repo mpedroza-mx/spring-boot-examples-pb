@@ -2,7 +2,7 @@ package org.learning.spring.spring_boot_solr_movies_search_service.util;
 
 import org.learning.spring.spring_boot_solr_movies_search_service.config.AppProperties;
 import org.learning.spring.spring_boot_solr_movies_search_service.dto.Filterable;
-import org.learning.spring.spring_boot_solr_movies_search_service.dto.SearchRequestDto;
+import org.learning.spring.spring_boot_solr_movies_search_service.dto.SearchKeyWordRequestDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,14 +18,14 @@ public class SolrQueryBuilder {
         this.solrFilterOperatorResolver = solrFilterOperatorResolver;
     }
 
-    public String buildQueryString(SearchRequestDto searchRequestDto) {
+    public String buildQueryString(SearchKeyWordRequestDto searchKeyWordRequestDto) {
         List<String> searchableFields = appProperties.getSolrSearchableFields();
         StringBuilder buildQueryStringField = new StringBuilder();
         AtomicInteger fieldsCounter = new AtomicInteger(0);
         searchableFields.forEach(field -> {
             buildQueryStringField.append(field);
             buildQueryStringField.append(":");
-            buildQueryStringField.append(searchRequestDto.getQuery());
+            buildQueryStringField.append(searchKeyWordRequestDto.getQuery());
             if (searchableFields.size() - fieldsCounter.get() > 1) {
                 buildQueryStringField.append(" OR ");
             }
@@ -35,12 +35,12 @@ public class SolrQueryBuilder {
         return buildQueryStringField.toString();
     }
 
-    public String[] buildFiltersString(SearchRequestDto searchRequestDto) {
+    public String[] buildFiltersString(SearchKeyWordRequestDto searchKeyWordRequestDto) {
         List<String> filterableFields = appProperties.getSolrFilterableFields();
-        String[] fq = new String[searchRequestDto.getFilters().size()];
+        String[] fq = new String[searchKeyWordRequestDto.getFilters().size()];
 
         AtomicInteger filterCounter = new AtomicInteger(0);
-        for (Filterable filter : searchRequestDto.getFilters()) {
+        for (Filterable filter : searchKeyWordRequestDto.getFilters()) {
             if (!filterableFields.contains(filter.getField())) {
                 throw new RuntimeException("Invalid field provided");
             }

@@ -36,6 +36,7 @@ public class MovieSolrEntity {
     private MovieSolrEntity.TomatoesSolrEntity tomatoes;
     @JsonProperty(value = "_version_")
     private long version;
+    private List<Float> vectors;
 
 
     @Data

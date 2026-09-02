@@ -17,3 +17,5 @@ app:
   solr_url: ${SOLR_URL:http://localhost:8983/solr/movies}
   solr_searchable_fields: [ awards.text, cast, countries, directors, fullPlot, genres, languages, plot, poster, rated, released, title, type ]
   solr_filterable_fields: [ awards.nominations, awards.text, awards.wins, cast, countries, directors, fullPlot, genres, id, imdb.id, imdb.rating,imdb.votes, languages, metaCritic, plot, poster, rated, released, title, type, tomatoes.critic.meter, tomatoes.critic.numReviews, tomatoes.critic.rating, tomatoes.fresh, tomatoes.lastUpdated, tomatoes.rotte, tomatoes.viewer.meter, tomatoes.viewer.numReviews, tomatoes.viewer.rating, type, year ]
+  ollama_url: ${OLLAMA_URL:http://localhost:11434}
+  semantic_search_enabled: ${SEMANTIC_SEARCH_ENABLED:false}

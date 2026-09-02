@@ -160,6 +160,7 @@ services:
       - KAFKA_INPUT_TOPIC=MOVIE.events
       - SOLR_URL=http://solr:8983/solr/movies
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      - SEMANTIC_SEARCH_ENABLED=${SEMANTIC_SEARCH_ENABLED:-false}
       - OLLAMA_URL=http://ollama:11434
     networks:
       - search_network
@@ -176,6 +177,8 @@ services:
     environment:
       - SOLR_URL=http://solr:8983/solr/movies
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:6005
+      - OLLAMA_URL=http://ollama:11434
+      - SEMANTIC_SEARCH_ENABLED=${SEMANTIC_SEARCH_ENABLED:-false}
     networks:
       - search_network
     depends_on:
@@ -250,6 +253,8 @@ services:
 
   jmeter:
     image: alpine/jmeter:5
+    profiles:
+      - LOAD_TEST
     working_dir: /tests
     volumes:
       - ./jmeter/loadTestFiles:/tests
@@ -268,6 +273,8 @@ services:
         condition: service_started
 
   ollama:
+    profiles:
+      - SEMANTIC_SEARCH
     image: ollama/ollama:0.33.2
     ports:
       - "11434:11434"
@@ -276,6 +283,8 @@ services:
       - search_network
 
   ollama-init:
+    profiles:
+      - SEMANTIC_SEARCH
     image: curlimages/curl
     volumes:
       - ./ollama/pull-nomic-embed-text-model-request-body.json:/pull-nomic-embed-text-model-request-body.json:ro

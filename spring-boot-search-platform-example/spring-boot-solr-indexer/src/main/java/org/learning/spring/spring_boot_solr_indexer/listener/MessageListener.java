@@ -4,8 +4,9 @@ import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.solr.client.solrj.RemoteSolrException;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.learning.spring.spring_boot_solr_indexer.config.AppProperties;
+import org.learning.spring.spring_boot_solr_indexer.embebings.EmbeddingsGenerator;
 import org.learning.spring.spring_boot_solr_indexer.entity.solr.MovieSolrEntity;
 import org.learning.spring.spring_boot_solr_indexer.mapper.MovieMapper;
 import org.learning.spring.spring_boot_solr_indexer.repository.solr.SolrMoviesRepository;
@@ -14,9 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import tools.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
@@ -33,16 +35,17 @@ public class MessageListener {
     private final ObjectMapper objectMapper;
     private final AtomicInteger counter = new AtomicInteger(1);
     private final MeterRegistry meterRegistry;
+    private final Map<String, Function<ConsumerRecord<String, String>, MovieSolrEntity>> eventResolver = new HashMap<>();
+    private final EmbeddingsGenerator embeddingsGenerator;
+    private final AppProperties appProperties;
 
-
-
-    private final Map<String, Function<ConsumerRecord<String,String>,MovieSolrEntity>> eventResolver = new HashMap<>();
-
-    public MessageListener(SolrMoviesRepository solrMoviesRepository, MovieMapper movieMapper, ObjectMapper objectMapper, MeterRegistry meterRegistry) {
+    public MessageListener(SolrMoviesRepository solrMoviesRepository, MovieMapper movieMapper, ObjectMapper objectMapper, MeterRegistry meterRegistry, EmbeddingsGenerator embeddingsGenerator, AppProperties appProperties) {
         this.solrMoviesRepository = solrMoviesRepository;
         this.movieMapper = movieMapper;
         this.objectMapper = objectMapper;
         this.meterRegistry = meterRegistry;
+        this.embeddingsGenerator = embeddingsGenerator;
+        this.appProperties = appProperties;
     }
 
     @PostConstruct
@@ -56,23 +59,37 @@ public class MessageListener {
 
     @KafkaListener(id = "spring-boot-solr-indexer",
             topics = "${app.kafka-topic}")
-    public void consumeMessage(ConsumerRecord<String, String> record) throws SolrServerException, IOException {
+    public void consumeMessage(ConsumerRecord<String, String> record) {
         LOGGER.info("Record message: {}", record.toString());
         String eventType = new String(record.headers().lastHeader("eventType").value(), StandardCharsets.UTF_8);
         MovieSolrEntity movieSolrEntity = eventResolver.get(eventType)
                 .apply(record);
-        try {
-            UpdateResponse updateResponse = solrMoviesRepository.sendDocuments(List.of(movieSolrEntity));
-            if (updateResponse.getStatus() != 0) {
+       Mono<Flux<UpdateResponse>> fluxResponse;
+
+       if (appProperties.isSemanticSearchEnabled()) {
+           fluxResponse = embeddingsGenerator.addEmbeddings(List.of(movieSolrEntity))
+                   .flatMap(movieSolrEntityWithEmbeddings -> Mono.fromCallable(() -> solrMoviesRepository.sendDocuments(movieSolrEntityWithEmbeddings)));
+       }else{
+           fluxResponse = Mono.fromCallable(()-> solrMoviesRepository.sendDocuments(List.of(movieSolrEntity)));
+       }
+
+
+       fluxResponse.flatMapMany(flux -> flux)
+               .subscribe(updateResponse -> {
+            if (updateResponse != null && updateResponse.getStatus() != 0) {
                 LOGGER.error("Error while trying to add the documents. Response status: {}", updateResponse.getStatus());
                 throw new RuntimeException("Error while trying to add the documents");
             }
-        } catch (RemoteSolrException rse) {
-            meterRegistry.counter("spring-boot-solr-warnings", "component", "MessageListener", "eventType", eventType, "movieId", movieSolrEntity.getId(), "solrHttpCode", String.valueOf(rse.code())).increment();
-            LOGGER.warn("We already have this movie in solr: {}", movieSolrEntity.getTitle());
-        }
+        }, error -> {
+            if (error instanceof RemoteSolrException rse) {
+                meterRegistry.counter("spring-boot-solr-warnings", "component", "MessageListener", "eventType", eventType, "movieId", movieSolrEntity.getId(), "solrHttpCode", String.valueOf(rse.code())).increment();
+                LOGGER.warn("We already have this movie in solr: {}", movieSolrEntity.getTitle());
+            } else {
+                LOGGER.error(error.getMessage(), error);
+            }
+        });
 
-        if (counter.getAndIncrement() % 2 == 0 && MOVIE_CREATED_EVENT.equals( eventType)) {
+        if (counter.getAndIncrement() % 2 == 0 && MOVIE_CREATED_EVENT.equals(eventType)) {
             throw new RuntimeException("Force to message redelivery");
         }
     }

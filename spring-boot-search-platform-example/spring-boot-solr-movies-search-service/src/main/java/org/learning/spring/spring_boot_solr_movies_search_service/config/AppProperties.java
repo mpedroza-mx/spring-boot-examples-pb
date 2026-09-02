@@ -13,5 +13,7 @@ public class AppProperties {
     private List<String> solrSearchableFields;
     private List<String> solrFilterableFields;
     private String solrUrl;
+    private String ollamaUrl;
+    private boolean semanticSearchEnabled;
 
 }

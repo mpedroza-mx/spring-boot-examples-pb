@@ -9,5 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class AppProperties {
     private String solrUrl;
     private String kafkaTopic;
+    private String ollamaUrl;
+    private boolean semanticSearchEnabled;
 
 }

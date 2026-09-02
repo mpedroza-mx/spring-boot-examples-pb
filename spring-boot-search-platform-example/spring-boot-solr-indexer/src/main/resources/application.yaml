@@ -17,3 +17,5 @@ management:
 app:
   solr_url: ${SOLR_URL:http://localhost:8983/solr/movies}
   kafka_topic: ${KAFKA_INPUT_TOPIC:MOVIE.events}
+  ollama_url: ${OLLAMA_URL:http://localhost:11434}
+  semantic_search_enabled: ${SEMANTIC_SEARCH_ENABLED:false}
