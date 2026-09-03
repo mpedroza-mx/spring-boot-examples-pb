@@ -18,7 +18,7 @@ Retrieves the movies found with the text provided
 #### Request
 
 ```bash
-curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:6060/api/movies/search -d @./spring-boot-solr-movies-search-service/requests/simple-search-request-body.json | jq .
+curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:6060/api/movies/search -d @./spring-boot-solr-movies-search-service/requests/keyWordSearch/simple-search-request-body.json | jq .
 ```
 
 #### Example Response
@@ -108,7 +108,7 @@ Retrieves the movies found with the text provided and the additional EQUALS filt
 #### Request
 
 ```bash
-curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:6060/api/movies/search -d @./spring-boot-solr-movies-search-service/requests/filter-equals-search-request-body.json | jq .
+curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:6060/api/movies/search -d @./spring-boot-solr-movies-search-service/requests/keyWordSearch/filter-equals-search-request-body.json | jq .
 ```
 
 #### Example Response
@@ -196,7 +196,7 @@ Retrieves the movies found with the text provided and the additional RANGE filte
 #### Request
 
 ```bash
-curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:6060/api/movies/search -d @./spring-boot-solr-movies-search-service/requests/filter-range-search-request-body.json | jq .
+curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:6060/api/movies/search -d @./spring-boot-solr-movies-search-service/requests/keyWordSearch/filter-range-search-request-body.json | jq .
 ```
 
 #### Example Response
@@ -283,7 +283,7 @@ Retrieves the movies found with the text provided and the additional filters
 #### Request
 
 ```bash
-curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:6060/api/movies/search -d @./spring-boot-solr-movies-search-service/requests/multiple-filter-search-request-body.json | jq .
+curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:6060/api/movies/search -d @./spring-boot-solr-movies-search-service/requests/keyWordSearch/multiple-filter-search-request-body.json | jq .
 ```
 
 #### Example Response
