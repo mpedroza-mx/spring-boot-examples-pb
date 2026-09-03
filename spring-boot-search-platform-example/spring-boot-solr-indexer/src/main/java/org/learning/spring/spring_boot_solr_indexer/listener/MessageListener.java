@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
@@ -36,15 +37,15 @@ public class MessageListener {
     private final AtomicInteger counter = new AtomicInteger(1);
     private final MeterRegistry meterRegistry;
     private final Map<String, Function<ConsumerRecord<String, String>, MovieSolrEntity>> eventResolver = new HashMap<>();
-    private final EmbeddingsGenerator embeddingsGenerator;
+    private final Optional<EmbeddingsGenerator> optEmbeddingsGenerator;
     private final AppProperties appProperties;
 
-    public MessageListener(SolrMoviesRepository solrMoviesRepository, MovieMapper movieMapper, ObjectMapper objectMapper, MeterRegistry meterRegistry, EmbeddingsGenerator embeddingsGenerator, AppProperties appProperties) {
+    public MessageListener(SolrMoviesRepository solrMoviesRepository, MovieMapper movieMapper, ObjectMapper objectMapper, MeterRegistry meterRegistry, Optional<EmbeddingsGenerator> optEmbeddingsGenerator, AppProperties appProperties) {
         this.solrMoviesRepository = solrMoviesRepository;
         this.movieMapper = movieMapper;
         this.objectMapper = objectMapper;
         this.meterRegistry = meterRegistry;
-        this.embeddingsGenerator = embeddingsGenerator;
+        this.optEmbeddingsGenerator = optEmbeddingsGenerator;
         this.appProperties = appProperties;
     }
 
@@ -67,6 +68,7 @@ public class MessageListener {
        Mono<Flux<UpdateResponse>> fluxResponse;
 
        if (appProperties.isSemanticSearchEnabled()) {
+           EmbeddingsGenerator embeddingsGenerator = optEmbeddingsGenerator.get();
            fluxResponse = embeddingsGenerator.addEmbeddings(List.of(movieSolrEntity))
                    .flatMap(movieSolrEntityWithEmbeddings -> Mono.fromCallable(() -> solrMoviesRepository.sendDocuments(movieSolrEntityWithEmbeddings)));
        }else{

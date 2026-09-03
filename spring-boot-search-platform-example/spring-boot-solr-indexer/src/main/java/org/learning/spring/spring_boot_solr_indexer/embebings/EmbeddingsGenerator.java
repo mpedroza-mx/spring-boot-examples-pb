@@ -3,10 +3,10 @@ package org.learning.spring.spring_boot_solr_indexer.embebings;
 import org.learning.spring.spring_boot_solr_indexer.entity.ollama.EmbeddingRequest;
 import org.learning.spring.spring_boot_solr_indexer.entity.ollama.EmbeddingResponse;
 import org.learning.spring.spring_boot_solr_indexer.entity.solr.MovieSolrEntity;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 
 @Component
+@ConditionalOnProperty(name = "app.semantic_search_enabled", havingValue = "true")
 public class EmbeddingsGenerator {
     private final WebClient ollamaWebClient;
     private static final String MODEL = "nomic-embed-text";

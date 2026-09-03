@@ -22,14 +22,14 @@ public class SearchService {
     private final SolrMoviesRepository solrMoviesRepository;
     private final MovieMapper movieMapper;
     private final SolrQueryBuilder solrQueryBuilder;
-    private final RestClient ollamaRestClient;
+    private final Optional<RestClient> optOllamaRestClient;
     private static final String MODEL = "nomic-embed-text";
 
-    public SearchService(SolrMoviesRepository solrMoviesRepository, MovieMapper movieMapper, SolrQueryBuilder solrQueryBuilder, RestClient ollamaRestClient) {
+    public SearchService(SolrMoviesRepository solrMoviesRepository, MovieMapper movieMapper, SolrQueryBuilder solrQueryBuilder, Optional<RestClient> optOllamaRestClient) {
         this.solrMoviesRepository = solrMoviesRepository;
         this.movieMapper = movieMapper;
         this.solrQueryBuilder = solrQueryBuilder;
-        this.ollamaRestClient = ollamaRestClient;
+        this.optOllamaRestClient = optOllamaRestClient;
     }
 
     public SearchResponseDto search(SearchKeyWordRequestDto searchKeyWordRequestDto) throws SolrServerException, IOException {
@@ -43,7 +43,7 @@ public class SearchService {
     }
 
     public SearchResponseDto search(SemanticSearchRequestDto semanticSearchRequestDto) throws SolrServerException, IOException {
-        return processSolrResponse(solrMoviesRepository.query(ollamaRestClient
+        return processSolrResponse(solrMoviesRepository.query(optOllamaRestClient.get()
                 .post()
                 .uri("api/embed")
                 .contentType(MediaType.APPLICATION_JSON)

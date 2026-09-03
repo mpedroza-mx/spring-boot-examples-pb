@@ -2,7 +2,6 @@ package org.learning.spring.spring_boot_solr_indexer.importer;
 
 import org.learning.spring.spring_boot_solr_indexer.config.AppProperties;
 import org.learning.spring.spring_boot_solr_indexer.embebings.EmbeddingsGenerator;
-import org.learning.spring.spring_boot_solr_indexer.entity.mongo.MovieEntity;
 import org.learning.spring.spring_boot_solr_indexer.entity.solr.MovieSolrEntity;
 import org.learning.spring.spring_boot_solr_indexer.mapper.MovieMapper;
 import org.learning.spring.spring_boot_solr_indexer.repository.mongo.MovieRepository;
@@ -16,6 +15,7 @@ import reactor.core.publisher.Mono;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -27,14 +27,14 @@ public class InitialDataSolrImport implements CommandLineRunner {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final SolrMoviesRepository solrMoviesRepository;
-    private final EmbeddingsGenerator embeddingsGenerator;
+    private final Optional<EmbeddingsGenerator> optEmbeddingsGenerator;
     private final AppProperties appProperties;
 
-    public InitialDataSolrImport(MovieRepository movieRepository, MovieMapper movieMapper, SolrMoviesRepository solrMoviesRepository, EmbeddingsGenerator embeddingsGenerator, AppProperties appProperties) {
+    public InitialDataSolrImport(MovieRepository movieRepository, MovieMapper movieMapper, SolrMoviesRepository solrMoviesRepository, Optional<EmbeddingsGenerator> optEmbeddingsGenerator, AppProperties appProperties) {
         this.movieRepository = movieRepository;
         this.movieMapper = movieMapper;
         this.solrMoviesRepository = solrMoviesRepository;
-        this.embeddingsGenerator = embeddingsGenerator;
+        this.optEmbeddingsGenerator = optEmbeddingsGenerator;
         this.appProperties = appProperties;
     }
 
@@ -48,6 +48,7 @@ public class InitialDataSolrImport implements CommandLineRunner {
         Flux<List<MovieSolrEntity>> fluxMovies;
         LOGGER.info("Semantic Search Enabled: {}", appProperties.isSemanticSearchEnabled());
         if (appProperties.isSemanticSearchEnabled()) {
+            EmbeddingsGenerator embeddingsGenerator = optEmbeddingsGenerator.get();
             fluxMovies = Flux.fromIterable(movieSolrEntities.subList(0, 2000))
                     .buffer(SEMANTIC_SEARCH_BATCH_SIZE)
                     .concatMap(embeddingsGenerator::addEmbeddings);
