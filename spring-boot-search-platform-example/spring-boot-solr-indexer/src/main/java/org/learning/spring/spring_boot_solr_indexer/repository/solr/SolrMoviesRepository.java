@@ -6,14 +6,11 @@ import org.apache.solr.client.solrj.request.ContentStreamUpdateRequest;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
 import org.apache.solr.common.util.ContentStreamBase;
-import org.learning.spring.spring_boot_solr_indexer.embebings.EmbeddingsGenerator;
 import org.learning.spring.spring_boot_solr_indexer.entity.solr.MovieSolrEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 

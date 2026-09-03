@@ -6,7 +6,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.solr.client.solrj.RemoteSolrException;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.learning.spring.spring_boot_solr_indexer.config.AppProperties;
-import org.learning.spring.spring_boot_solr_indexer.embebings.EmbeddingsGenerator;
+import org.learning.spring.spring_boot_solr_indexer.embeddings.EmbeddingsGenerator;
 import org.learning.spring.spring_boot_solr_indexer.entity.solr.MovieSolrEntity;
 import org.learning.spring.spring_boot_solr_indexer.mapper.MovieMapper;
 import org.learning.spring.spring_boot_solr_indexer.repository.solr.SolrMoviesRepository;

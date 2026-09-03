@@ -1,7 +1,7 @@
 package org.learning.spring.spring_boot_solr_indexer.importer;
 
 import org.learning.spring.spring_boot_solr_indexer.config.AppProperties;
-import org.learning.spring.spring_boot_solr_indexer.embebings.EmbeddingsGenerator;
+import org.learning.spring.spring_boot_solr_indexer.embeddings.EmbeddingsGenerator;
 import org.learning.spring.spring_boot_solr_indexer.entity.solr.MovieSolrEntity;
 import org.learning.spring.spring_boot_solr_indexer.mapper.MovieMapper;
 import org.learning.spring.spring_boot_solr_indexer.repository.mongo.MovieRepository;

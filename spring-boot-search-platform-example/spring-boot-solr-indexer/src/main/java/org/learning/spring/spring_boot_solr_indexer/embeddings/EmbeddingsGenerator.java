@@ -1,4 +1,4 @@
-package org.learning.spring.spring_boot_solr_indexer.embebings;
+package org.learning.spring.spring_boot_solr_indexer.embeddings;
 
 import org.learning.spring.spring_boot_solr_indexer.entity.ollama.EmbeddingRequest;
 import org.learning.spring.spring_boot_solr_indexer.entity.ollama.EmbeddingResponse;
