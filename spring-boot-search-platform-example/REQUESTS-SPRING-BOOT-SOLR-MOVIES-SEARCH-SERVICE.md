@@ -369,7 +369,7 @@ Retrieves the movies found based on the meaning of the provided query
 #### Request
 
 ```bash
-curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:6060/api/movies/semantic-search -d @./spring-boot-solr-movies-search-service/requests/semanticSearch/semantic-search-request-body.json | jq '.movies[] | {title, year, plot, plot,fullPlot, genres}'
+curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:6060/api/movies/semantic-search -d @./spring-boot-solr-movies-search-service/requests/semanticSearch/semantic-search-request-body.json | jq '[.movies[] | {title, year, plot, plot,fullPlot, genres}]'
 ```
 
 #### Example Response
@@ -390,13 +390,21 @@ curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" htt
     ]
   },
   {
-    "title": "Forbidden Planet",
-    "year": "1956",
-    "plot": "A starship crew goes to investigate the silence of a planet's colony only to find two survivors and a deadly secret that one of them has.",
-    "fullPlot": "When Adams and his crew are sent to investigate the silence from a planet inhabited by scientists, he finds all but two have died. Dr. Morbius and his daughter Altaira have somehow survived a hideous monster which roams the planet. Unknown to Adams, Morbius has made a discovery, and has no intention of sharing it (or his daughter!) with anyone.",
+    "title": "Rocketship X-M",
+    "year": "1950",
+    "plot": "An astronaut crew of 4 men and one woman on their way to the Moon, are unexpectedly propelled by gravitational forces and end up on Mars instead.",
+    "fullPlot": "Astronauts (Lloyd Bridges, Osa Massen, John Emery, Noah Beery, Jr., and Hugh O'Brien) blast off to explore the moon. Because of craft malfunction and some fuel calculations, they end up landing on Mars. On Mars, evidence of a once powerful civilization is found. The scientists determine that an atomic war destroyed most of the Martians (who surprisingly look like humans). Those that survived reverted to a caveman-like existence.",
     "genres": [
-      "Action",
-      "Adventure",
+      "Sci-Fi"
+    ]
+  },
+  {
+    "title": "Secrets of Life",
+    "year": "1956",
+    "plot": "A feature-length drama showing the changing World of Nature, the sky, the sea, the sun, planets,insects and volcanic action. A story of Nature's strange and intricate designs for survival and her many methods of perpetrating life.",
+    "fullPlot": "A feature-length drama showing the changing World of Nature, the sky, the sea, the sun, planets,insects and volcanic action. A story of Nature's strange and intricate designs for survival and her many methods of perpetrating life.",
+    "genres": [
+      "Documentary",
       "Family"
     ]
   },
@@ -420,67 +428,58 @@ curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" htt
     ]
   },
   {
-    "title": "The Dependent",
-    "year": "1969",
-    "plot": "Fernandez is a lonely man leading a lonely life. All he does is work for an old man in a hardware store. But all that changes, when he meets the girl of his dreams...and her family.",
-    "fullPlot": "Fernandez is a lonely man leading a lonely life. All he does is work for an old man in a hardware store. But all that changes, when he meets the girl of his dreams...and her family.",
-    "genres": [
-      "Drama"
-    ]
-  },
-  {
-    "title": "The Invisible Ray",
-    "year": "1936",
-    "plot": "A scientist becomes murderous after discovering, and being exposed to the radiation of, a powerful new element called Radium X.",
-    "fullPlot": "Visionary scientist Janos Rukh convinces a group of scientists and supporters to mount an expedition to the African continent to locate and study an ancient meteorite of great significance. He exposes himself to the highly toxic radiation of the meteorite, and while an antidote devised by Dr. Benet saves him from death by radiation poisoning, his naked touch causes instant death to others. Back in London, the benefits of the meteorite's controlled radiation offer Dr. Benet an opportunity to restore eyesight to the blind. The antidote's toxicity excites Prof. Rukh into paranoid rages as he seeks revenge against the members of his expedition, who he accuses of stealing his discovery for their own glory.",
-    "genres": [
-      "Horror",
-      "Sci-Fi",
-      "Thriller"
-    ]
-  },
-  {
-    "title": "Secrets of Life",
+    "title": "Invasion of the Body Snatchers",
     "year": "1956",
-    "plot": "A feature-length drama showing the changing World of Nature, the sky, the sea, the sun, planets,insects and volcanic action. A story of Nature's strange and intricate designs for survival and her many methods of perpetrating life.",
-    "fullPlot": "A feature-length drama showing the changing World of Nature, the sky, the sea, the sun, planets,insects and volcanic action. A story of Nature's strange and intricate designs for survival and her many methods of perpetrating life.",
-    "genres": [
-      "Documentary",
-      "Family"
-    ]
-  },
-  {
-    "title": "You Only Live Twice",
-    "year": "1967",
-    "plot": "Agent 007 and the Japanese secret service ninja force must find and stop the true culprit of a series of spacejackings before nuclear war is provoked.",
-    "fullPlot": "When an American space capsule is swallowed up by what they believe to be a Russian spaceship, World War 3 nearly breaks out. The British Government, however, suspect that other powers are at work as the space craft went down near Japan. S.P.E.C.T.R.E. is the force behind the theft, as James Bond discovers, but its motives are far from clear, and he must first find out where the captured space capsule is held before America and Russia initiate another world war.",
-    "genres": [
-      "Action",
-      "Adventure",
-      "Thriller"
-    ]
-  },
-  {
-    "title": "Lonely Are the Brave",
-    "year": "1962",
-    "plot": "A fiercely independent cowboy arranges to have himself locked up in jail in order to then escape with an old friend who has been sentenced to the penitentiary.",
-    "fullPlot": "In order to free his best friend Bondi, Jack Burns lets himself be imprisoned only to find out that Bondi does not want to escape. Thus Burns breaks out on his own and is afterwards being chased by sheriff Johnson with helicopters and jeeps.",
-    "genres": [
-      "Drama",
-      "Western"
-    ]
-  },
-  {
-    "title": "This Island Earth",
-    "year": "1955",
-    "plot": "Aliens come to Earth seeking scientists to help them in their war.",
-    "fullPlot": "Dr. Meacham is chosen along with others by the inhabitants of the planet Metaluna to do research that will help save their dying planet. However, an evil scheme is uncovered by the suspecting Dr. Meacham when he discovers the Metalunan's plan to take over Earth. Dr. Meacham then escapes an exploding Metalunan built Earth lab along with Dr. Adams only to be kidnapped while flying away in a small plane. A flying saucer wisks both the scientists off to Metaluna where they are held accountable for blowing up the Metalunan Earth lab during their escape. They later escape there with the help of Exeter the friendly Metalunan. Metaluna then self destructs and the Doctors make it safely back to Earth, which is saved from Metalunan invasion.",
+    "plot": "A small-town doctor learns that the population of his community is being replaced by emotionless alien duplicates.",
+    "fullPlot": "Dr Miles Bennell returns his small town practice to find several of his patients suffering the paranoid delusion that their friends or relatives are impostors. He is initially skeptical, especially when the alleged dopplegèngers are able to answer detailed questions about their victim's lives, but he is eventually persuaded that something odd has happened and determines to find out what is causing this phenomenon. This film can be seen as a paranoid 1950s warning against those Damn Commies or, conversely, as a metaphor for the tyranny of McCarthyism (or the totalitarian system of Your Choice) and has a pro- and epilogue that was forced upon Siegel by the studio to lighten the tone.",
     "genres": [
       "Horror",
       "Sci-Fi"
     ]
+  },
+  {
+    "title": "A Phantasy",
+    "year": "1952",
+    "plot": "An animated film drawn entirely in pastels. Various fantastical plant-like things \"grow\" from the ground, eventually launching five spheres. The spheres drift in space while changing shapes...",
+    "fullPlot": "An animated film drawn entirely in pastels. Various fantastical plant-like things \"grow\" from the ground, eventually launching five spheres. The spheres drift in space while changing shapes and come back down to another setting, which eventually becomes more fantastical and symbolic than the opening one. The soundtrack has a jazz slant, with an ensemble of four saxophones and synthetic sound (i.e. sound created by drawing directly on the soundtrack).",
+    "genres": [
+      "Animation",
+      "Short"
+    ]
+  },
+  {
+    "title": "The 10th Victim",
+    "year": "1965",
+    "plot": "Some people like violence so much, that they decide to create a club in which human hunts are organized - members being alternately hunters, and prey, until they end up dead.",
+    "fullPlot": "A campy futuristic tale where people hunt one another for sport. In this film, Victim and Hunter run around Italy trying to score a kill in front of the movie crews they arranged so they could make commercials from the footage.",
+    "genres": [
+      "Action",
+      "Sci-Fi"
+    ]
+  },
+  {
+    "title": "Invaders from Mars",
+    "year": "1953",
+    "plot": "A young boy learns that space aliens are taking over the minds of earthlings.",
+    "fullPlot": "One night, young David McLean sees a spaceship crash into a nearby sandpit. His father goes to investigate, but comes back changed. Where once he was cheerful and affectionate, he's now sullen and snarlingly rude. Others fall into the sandpit and begin acting like him: cold, ill-tempered and conspiratorial. David knows that aliens are taking over the bodies of humans, but he'll soon discover there have been far more of these terrible thefts than he could have imagined. The young doom-monger finds some serious help in a lady doctor and a brilliant astronomer. Soon they meet the aliens: green creatures with insect-like eyes. These beings prove to be slaves to their leader: a large, silent head with ceaselessly shifting eyes and two tentacles on either side, each of which branches off into three smaller tentacles. It's up to the redoubtable earth trio to stop its evil plans.",
+    "genres": [
+      "Horror",
+      "Sci-Fi"
+    ]
+  },
+  {
+    "title": "The War of the Worlds",
+    "year": "1953",
+    "plot": "The film adaptation of the H.G.Wells story told on radio of the invasion of Earth by Martians.",
+    "fullPlot": "H.G. Well's classic novel is brought to life is this tale of alien invasion. The residents of a small town in California are excited when a flaming meteor lands in the hills. Their joy is tempered somewhat when they discover that it has passengers who are not very friendly. The movie itself is understood better when you consider that it was made at the height of the Cold War--just replace Martian with Russian....",
+    "genres": [
+      "Action",
+      "Sci-Fi",
+      "Thriller"
+    ]
   }
 ]
+
 
 ```
 
