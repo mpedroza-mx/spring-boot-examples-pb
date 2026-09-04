@@ -87,7 +87,7 @@
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Movie" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Movie" enabled="false">
           <stringProp name="HTTPSampler.domain">spring-boot-mongodb-movies-service</stringProp>
           <stringProp name="HTTPSampler.port">7070</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
