@@ -23,10 +23,10 @@ public class PromptResponse {
     @JsonProperty("prompt_eval_count")
     private int promptEvalCount;
     @JsonProperty("prompt_eval_duration")
-    private int promptEvalDuration;
+    private long promptEvalDuration;
     @JsonProperty("eval_count")
     private int evalCount;
     @JsonProperty("eval_duration")
-    private int evalDuration;
+    private long evalDuration;
 
 }
