@@ -7,6 +7,8 @@ import org.learning.spring.spring_boot_solr_movies_search_service.dto.*;
 import org.learning.spring.spring_boot_solr_movies_search_service.mapper.MovieMapper;
 import org.learning.spring.spring_boot_solr_movies_search_service.repository.SolrMoviesRepository;
 import org.learning.spring.spring_boot_solr_movies_search_service.util.SolrQueryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -18,7 +20,7 @@ import java.util.Optional;
 
 @Service
 public class SearchService {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchService.class);
     private final SolrMoviesRepository solrMoviesRepository;
     private final MovieMapper movieMapper;
     private final SolrQueryBuilder solrQueryBuilder;
@@ -43,7 +45,9 @@ public class SearchService {
     }
 
     public SearchResponseDto search(SemanticSearchRequestDto semanticSearchRequestDto) throws SolrServerException, IOException {
-        return processSolrResponse(solrMoviesRepository.query(optOllamaRestClient.get()
+        long startTime = System.currentTimeMillis();
+
+        List<Float> embeddings = optOllamaRestClient.get()
                 .post()
                 .uri("api/embed")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -54,7 +58,10 @@ public class SearchService {
                 .retrieve()
                 .body(EmbeddingResponse.class)
                 .getEmbeddings()
-                .get(0)));
+                .get(0);
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("ollamaRestClient: api/embed response time in milliseconds {}", (endTime-startTime));
+        return processSolrResponse(solrMoviesRepository.query(embeddings));
 
     }
 

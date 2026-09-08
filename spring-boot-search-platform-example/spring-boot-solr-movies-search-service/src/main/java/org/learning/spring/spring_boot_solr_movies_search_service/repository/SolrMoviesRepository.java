@@ -6,6 +6,8 @@ import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 @Component
 public class SolrMoviesRepository {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SolrMoviesRepository.class);
     private final HttpJettySolrClient httpJettySolrClient;
 
     public SolrMoviesRepository(HttpJettySolrClient httpJettySolrClient) {
@@ -34,13 +37,16 @@ public class SolrMoviesRepository {
     }
 
     public QueryResponse query(List<Float> embeddings) throws SolrServerException, IOException {
+        long startTime = System.currentTimeMillis();
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setQuery("{!knn f=vectors topK=10}" +embeddings);
         QueryRequest queryRequest = new QueryRequest(solrQuery);
         queryRequest.setMethod(SolrRequest.METHOD.POST);
 
-
-        return queryRequest.process(httpJettySolrClient);
+        QueryResponse queryResponse =queryRequest.process(httpJettySolrClient);
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("httpJettySolrClient: query response time in milliseconds {}", (endTime-startTime));
+        return queryResponse;
     }
 
 }
