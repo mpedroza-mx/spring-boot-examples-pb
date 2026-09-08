@@ -38,6 +38,7 @@ public class RecommendationService {
                 .semanticQuery(recommendationRequestDto.getQuery())
                 .build();
 
+
         SearchResponseDto searchResponseDto = searchService.search(semanticSearchRequestDto);
         PromptRequest promptRequest = PromptRequest.builder()
                 .model(MODEL)
@@ -48,10 +49,11 @@ public class RecommendationService {
                         .role("user")
                         .content(buildMessageContent(searchResponseDto,semanticSearchRequestDto.getSemanticQuery())).build()))
                 .stream(false)
+                .format("json")
                 .build();
 
-        LOGGER.debug ("REQUEST: {}" , objectMapper.writeValueAsString(promptRequest));
-
+        LOGGER.info ("REQUEST: {}" , objectMapper.writeValueAsString(promptRequest));
+        long startTime = System.currentTimeMillis();
         PromptResponse promptResponse = optOllamaRestClient.get()
                 .post()
                 .uri("api/chat")
@@ -59,9 +61,11 @@ public class RecommendationService {
                 .body(promptRequest)
                 .retrieve()
                 .body(PromptResponse.class);
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("ollamaRestClient: api/chat response time in milliseconds {}", (endTime-startTime));
 
 
-        LOGGER.debug ("RESPONSE: {}" , objectMapper.writeValueAsString(promptResponse));
+        LOGGER.info ("RESPONSE: {}" , objectMapper.writeValueAsString(promptResponse));
 
         RecommendationResponseDto recommendationResponseDto = objectMapper.readValue( promptResponse.getMessage().getContent()
                 .replace("```json","")
@@ -119,9 +123,10 @@ public class RecommendationService {
 
         userContent.append("Question from User: " + query);
         userContent.append("\\n");
-        userContent.append("Return exactly 5 recommendations. Use this JSON format for your response\\n");
-        userContent.append("{\"moviesRecommendations\": [{\"movieTitle\": \"The Day the Earth Stood Still\", \"reason\": \"An alien lands and tells the people of Earth that they must live peacefully or be destroyed\"}]}\\n");
-        userContent.append("The reason must be short sentence.");
+        userContent.append("Return exactly 3 recommendations. Use this EXACT JSON format for your response\\n");
+        userContent.append("{\"moviesRecommendations\": [{\"movieTitle\": \"The movie title\", \"reason\": \"The valid reason why this movie is recommended\"}]}\\n");
+        userContent.append("The reason must be short sentence explaining why do you recommend the movie for example:");
+        userContent.append("- The movie's plot talks about the topic that you are requesting");
         return userContent.toString();
     }
 
