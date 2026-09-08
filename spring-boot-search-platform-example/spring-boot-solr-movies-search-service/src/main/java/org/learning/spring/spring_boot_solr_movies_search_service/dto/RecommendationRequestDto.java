@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecommendationRequestDto {
-    private String sematicQuery;
+    private String query;
 }

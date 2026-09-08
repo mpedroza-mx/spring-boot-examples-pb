@@ -1,9 +1,6 @@
 package org.learning.spring.spring_boot_solr_movies_search_service.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +9,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecommendationResponseDto {
-    private List<Movie> movies;
-    private int numOfMoviesFound;
+    private String query;
+    private List<MovieRecommendation> moviesRecommendations;
+
+
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    public static class MovieRecommendation {
+        private String movieTitle;
+        private String reason;
+    }
 }
