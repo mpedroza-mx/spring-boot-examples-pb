@@ -190,6 +190,8 @@ services:
 
   prometheus:
     image: prom/prometheus:v3.13.1
+    profiles:
+      - MONITORING
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.external-url=http://localhost:9090'
@@ -210,6 +212,9 @@ services:
 
   grafana:
     image: grafana/grafana:13.0
+    profiles:
+      - MONITORING
+      - LOAD_TEST
     ports:
       - "3000:3000"
     volumes:
@@ -223,6 +228,9 @@ services:
 
   alertmanager:
     image: prom/alertmanager:v0.33.1
+    profiles:
+      - MONITORING
+      - LOAD_TEST
     ports:
       - "9093:9093"
     networks:
@@ -239,6 +247,9 @@ services:
 
   mailpit:
     image: axllent/mailpit:v1.30
+    profiles:
+      - MONITORING
+      - LOAD_TEST
     ports:
       - "8025:8025"
       - "1025:1025"
@@ -288,7 +299,7 @@ services:
     image: curlimages/curl
     volumes:
       - ./ollama/pull-nomic-embed-text-model-request-body.json:/pull-nomic-embed-text-model-request-body.json:ro
-      - ./ollama/pull-qwen3_4b-model-request-body.json:/pull-qwen3_4b-model-request-body.json:ro
+      - ./ollama/pull-llama3_2_3b-model-request-body.json:/pull-llama3_2_3b-model-request-body.json:ro
     depends_on:
       ollama:
         condition: service_started
@@ -305,9 +316,9 @@ services:
       
       curl -X POST -H 'Accept:application/json' -H  'Content-Type:application/json' http://ollama:11434/api/pull -d @/pull-nomic-embed-text-model-request-body.json;   
       
-      echo 'Pulling qwen3_8b-model...';
+      echo 'Pulling pull-llama3_2_3b-model..';
       
-      curl -X POST -H 'Accept:application/json' -H  'Content-Type:application/json' http://ollama:11434/api/pull -d @/pull-qwen3_4b-model-request-body.json;"    
+      curl -X POST -H 'Accept:application/json' -H  'Content-Type:application/json' http://ollama:11434/api/pull -d @/pull-llama3_2_3b-model-request-body.json;"    
 
 volumes:
   prom_data:
