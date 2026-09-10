@@ -44,7 +44,7 @@ public class RecommendationService {
                 .model(MODEL)
                 .messages(List.of(Message.builder()
                         .role("system")
-                        .content("You are a movies recommendation assistant. Use only the movies provided as context to make the recommendations")
+                        .content("You are a movie recommendation assistant. Use only the movies provided as context to make the recommendations")
                         .build(), Message.builder()
                         .role("user")
                         .content(buildMessageContent(searchResponseDto,semanticSearchRequestDto.getSemanticQuery())).build()))
