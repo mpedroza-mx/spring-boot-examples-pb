@@ -47,3 +47,13 @@ https://medium.com/@mpedroza-mx/building-an-idempotent-kafka-consumer-with-sprin
 How to Implement Semantic Search with Ollama, Spring Boot and Solr: A Comprehensive Tutorial
 
 https://medium.com/@mpedroza-mx/how-to-implement-semantic-search-with-ollama-spring-boot-and-solr-a-comprehensive-tutorial-9ab5910a3e26
+
+
+
+## Third-Party Models
+
+This project uses third-party models through Ollama:
+* llama3.2:3b
+* nomic-embed-text
+  The model weights are not included in this repository. They are downloaded automatically by the ollama-init container when the application stack is started.
+  Each model is subject to its respective license and terms provided by its publisher.
