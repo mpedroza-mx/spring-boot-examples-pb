@@ -42,13 +42,16 @@ https://medium.com/@mpedroza-mx/from-metrics-to-dashboards-monitoring-spring-boo
 
 Building an Idempotent Kafka Consumer with Spring Boot and Apache Solr: A Practical Approach
 
-https://medium.com/@mpedroza-mx/building-an-idempotent-kafka-consumer-with-spring-boot-and-apache-solr-a-practical-approach-3e284d108c87
+https://medium.com/@mpedroza-mx/building-an-idempotent-kafka-consumer-with-spring-boot-and-apache-solr-a-practical-approach-3e284d108c87?sharedUserId=mpedroza-mx
 
 How to Implement Semantic Search with Ollama, Spring Boot and Solr: A Comprehensive Tutorial
 
-https://medium.com/@mpedroza-mx/how-to-implement-semantic-search-with-ollama-spring-boot-and-solr-a-comprehensive-tutorial-9ab5910a3e26
+https://medium.com/@mpedroza-mx/how-to-implement-semantic-search-with-ollama-spring-boot-and-solr-a-comprehensive-tutorial-9ab5910a3e26?sharedUserId=mpedroza-mx
 
 
+Building a Local RAG System with Spring Boot, Ollama and Apache Solr: A Practical Guide Approach
+
+https://medium.com/@mpedroza-mx/building-a-local-rag-system-with-spring-boot-ollama-and-apache-solr-a-practical-guide-approach-306106df8bd5?sharedUserId=mpedroza-mx
 
 ## Third-Party Models
 
