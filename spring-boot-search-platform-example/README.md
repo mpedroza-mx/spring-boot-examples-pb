@@ -3,13 +3,15 @@
 
 This is an example that includes several components used to create a search service that includes tools such as:
 
-* Mongodb
-* Debezium
-* Apache Solr
-* Springboot
-* Prometheus
 * Alertmanager
+* Apache Solr
+* Debezium
+* Grafana
 * MailPit
+* Mongodb
+* Ollama
+* Prometheus
+* Spring Boot
 
 Here you can find a series of documents that explains how all this components interact to achieve this:
 
