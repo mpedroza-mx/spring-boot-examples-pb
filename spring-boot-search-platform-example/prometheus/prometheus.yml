@@ -26,3 +26,8 @@ scrape_configs:
     static_configs:
       - targets: [ "spring-boot-solr-indexer:8081" ]
     scrape_interval: 15s
+  - job_name: "podman_exporter"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: [ "podman-exporter:9882" ]
+    scrape_interval: 15s
