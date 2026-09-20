@@ -139,7 +139,8 @@ services:
       - 7070:7070
       - "4005:4005" # Debugging Port
     environment:
-      MONGODB_URL: mongodb://mongodb:27017/
+      - MONGODB_URL=mongodb://mongodb:27017/
+      - VALKEY_HOST=valkey
     networks:
       - search_network
     depends_on:
@@ -192,6 +193,7 @@ services:
     image: prom/prometheus:v3.13.1
     profiles:
       - MONITORING
+      - LOAD_TEST
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.external-url=http://localhost:9090'
@@ -343,6 +345,36 @@ services:
       valkey:
         condition: service_started
 
+
+  podman-exporter:
+    container_name: podman-exporter
+    image: quay.io/navidys/prometheus-podman-exporter:v2.0.0
+    security_opt:
+      - label=disable
+    userns_mode: keep-id
+    ports:
+      - "9882:9882"
+    environment:
+      - CONTAINER_HOST=unix:///run/user/501/podman/podman.sock
+      - HOME=/tmp
+    volumes:
+      - /run/user/501/podman/podman.sock:/run/user/501/podman/podman.sock
+    networks:
+      - search_network
+
+  rate-limit-service:
+    build:
+      context: ./rate-limit-service
+    ports:
+      - 5050:5050
+      - "5005:5005" # Debugging Port
+    environment:
+      - VALKEY_HOST=valkey
+    networks:
+      - search_network
+    depends_on:
+      valkey:
+        condition: service_started
 
 volumes:
   prom_data:
