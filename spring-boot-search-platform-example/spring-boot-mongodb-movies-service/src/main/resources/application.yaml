@@ -3,5 +3,10 @@ spring:
     mongodb:
       uri: ${MONGODB_URL:mongodb://localhost:27017/}
       database: "sample_mflix"
+    redis:
+      url: redis://${VALKEY_HOST:localhost}:6379
+  threads:
+    virtual:
+      enabled: true
 server:
   port: 7070
