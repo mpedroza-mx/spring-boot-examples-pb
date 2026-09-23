@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: rate-limit-service
+  data:
+    redis:
+      url: redis://${VALKEY_HOST:localhost}:6379
+server:
+  port: 5050
