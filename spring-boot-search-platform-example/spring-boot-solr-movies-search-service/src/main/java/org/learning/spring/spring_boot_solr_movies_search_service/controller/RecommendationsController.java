@@ -15,7 +15,7 @@ import java.io.IOException;
 
 
 @RestController
-@RequestMapping("/api/movies/recommedations")
+@RequestMapping("/api/movies/recommendations")
 public class RecommendationsController {
 
     private RecommendationService recommendationService;
