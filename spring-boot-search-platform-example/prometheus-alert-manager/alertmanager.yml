@@ -6,14 +6,14 @@ global:
 
 route:
   group_by: ['service','severity']
-  group_wait: 30s
-  group_interval: 5m
+  group_wait: 5s
+  group_interval: 30s
   repeat_interval: 4h
   receiver: 'email-receiver'
 
   routes:
     - match:
-        container_stats:  'spring_boot_solr_movies_search_service_cpu_usage'
+        container_stats:  'spring_boot_mongodb_movies_service_cpu_usage'
       receiver: 'webhook-receiver'
 
 templates:
@@ -29,6 +29,6 @@ receivers:
           subject: '[{{ .Status | toUpper }}] Service Alert: {{ .CommonLabels.alertname }}'
         html: '{{ template "email.custom" . }}'
   - name: 'webhook-receiver'
-    webhook-configs:
-      - url: 'http://rate-limit-service:5050/alerts'
-        send_resolve: true
+    webhook_configs:
+      - url: 'http://rate-limit-service:5050/api/alerts'
+        send_resolved: true

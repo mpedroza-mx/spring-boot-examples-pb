@@ -49,7 +49,7 @@ groups:
         expr: sum(rate(podman_container_cpu_seconds_total[30s])) by (id) * 100 * on(id) podman_container_info{name="spring-boot-search-platform-example-spring-boot-mongodb-movies-service-1"} > 80
         for: 30s
         labels:
-          container_stats: spring_boot_solr_movies_search_service_cpu_usage
+          container_stats: spring_boot_mongodb_movies_service_cpu_usage
           severity: critical
         annotations:
           summary: "spring-boot-mongodb-movies-service CPU usage higher than 80%"
