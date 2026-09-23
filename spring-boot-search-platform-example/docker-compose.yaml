@@ -141,6 +141,7 @@ services:
     environment:
       - MONGODB_URL=mongodb://mongodb:27017/
       - VALKEY_HOST=valkey
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:4005
     networks:
       - search_network
     depends_on:
@@ -367,9 +368,10 @@ services:
       context: ./rate-limit-service
     ports:
       - 5050:5050
-      - "5005:5005" # Debugging Port
+      - "5055:5055" # Debugging Port
     environment:
       - VALKEY_HOST=valkey
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5055
     networks:
       - search_network
     depends_on:
