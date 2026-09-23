@@ -136,7 +136,7 @@ services:
     build:
       context: ./spring-boot-mongodb-movies-service
     ports:
-      - 7070:7070
+      - 7070
       - "4005:4005" # Debugging Port
     environment:
       - MONGODB_URL=mongodb://mongodb:27017/
@@ -174,7 +174,7 @@ services:
     build:
       context: ./spring-boot-solr-movies-search-service
     ports:
-      - 6060:6060
+      - 6060
       - "6005:6005" # Debugging Port
     environment:
       - SOLR_URL=http://solr:8983/solr/movies
@@ -376,6 +376,23 @@ services:
       - search_network
     depends_on:
       valkey:
+        condition: service_started
+
+  openresty:
+    container_name: openresty
+    image: openresty/openresty:1.31-alpine
+    ports:
+      - 7070:80
+    volumes:
+      - ./openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+    networks:
+      - search_network
+    depends_on:
+      valkey:
+        condition: service_started
+      spring-boot-mongodb-movies-service:
+        condition: service_started
+      spring-boot-solr-movies-search-service:
         condition: service_started
 
 volumes:
