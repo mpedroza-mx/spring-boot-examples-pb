@@ -7,6 +7,9 @@ spring:
       database: "sample_mflix"
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  threads:
+    virtual:
+      enabled: true
 management:
   server:
     port: 8081
