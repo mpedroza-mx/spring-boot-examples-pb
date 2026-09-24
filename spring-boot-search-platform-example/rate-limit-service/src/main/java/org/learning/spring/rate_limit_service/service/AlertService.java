@@ -23,7 +23,7 @@ public class AlertService {
         prometheusAlertRequestBody.getAlerts().forEach(alert -> {
             if (alert.getStatus().equals("firing")) {
 
-                reactiveRedisTemplate.opsForValue().set(alert.getLabels().getAlertName(), true, Duration.ofMinutes(1)).subscribe(
+                reactiveRedisTemplate.opsForValue().set(alert.getLabels().getAlertName(), true, Duration.ofMinutes(4    )).subscribe(
                         success -> LOGGER.warn("Enable rate limit for: {}", alert.getLabels().getAlertName()),
                         error -> LOGGER.error("Error while trying to activate the rate limit for alert {}", alert.getLabels().getAlertName())
                 );
