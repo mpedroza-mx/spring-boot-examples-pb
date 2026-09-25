@@ -50,6 +50,7 @@ groups:
         for: 30s
         labels:
           container_stats: spring_boot_mongodb_movies_service_cpu_usage
+          instance: '{{ $labels.instance }}'
           severity: critical
         annotations:
           summary: "spring-boot-mongodb-movies-service CPU usage higher than 80%"
@@ -59,6 +60,7 @@ groups:
         for: 30s
         labels:
           service: spring_boot_mongodb_movies_service
+          instance: '{{ $labels.instance }}'
           severity: critical
         annotations:
           summary: "spring-boot-mongodb-movies-service CPU usage higher than 80%"
@@ -68,6 +70,17 @@ groups:
         for: 30s
         labels:
           container_stats: spring_boot_solr_movies_search_service_cpu_usage
+          instance: '{{ $labels.instance }}'
+          severity: critical
+        annotations:
+          summary: "spring-boot-solr-movies-search-service CPU usage higher than 80%"
+          description: "The instance *{{ $labels.instance }}* CPU usage has been higher than 80% for more than 30 seconds"
+      - alert: spring_boot_solr_movies_search_service_high_cpu_usage_email
+        expr: sum(rate(podman_container_cpu_seconds_total[30s])) by (id) * 100 * on(id) podman_container_info{name="spring-boot-search-platform-example-spring-boot-solr-movies-search-service-1"} > 80
+        for: 30s
+        labels:
+          service: spring_boot_solr_movies_search_service
+          instance: '{{ $labels.instance }}'
           severity: critical
         annotations:
           summary: "spring-boot-solr-movies-search-service CPU usage higher than 80%"
