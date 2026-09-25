@@ -8,5 +8,12 @@ spring:
   threads:
     virtual:
       enabled: true
+management:
+  server:
+    port: 7070
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus,health"
 server:
   port: 7070

@@ -16,7 +16,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "prometheus,metrics"
+        include: "prometheus,metrics,health"
 app:
   solr_url: ${SOLR_URL:http://localhost:8983/solr/movies}
   kafka_topic: ${KAFKA_INPUT_TOPIC:MOVIE.events}

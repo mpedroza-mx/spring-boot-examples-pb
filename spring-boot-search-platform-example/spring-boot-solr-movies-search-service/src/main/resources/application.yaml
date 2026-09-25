@@ -5,10 +5,12 @@ spring:
 server:
   port: 6060
 management:
+  server:
+    port: 6060
   endpoints:
     web:
       exposure:
-        include: "health,info,prometheus"
+        include: "health,info,prometheus,health"
   metrics:
     distribution:
       percentiles-histograms:
