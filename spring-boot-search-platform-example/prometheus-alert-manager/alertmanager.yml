@@ -12,12 +12,11 @@ route:
   receiver: 'email-receiver'
 
   routes:
-    - match:
-        container_stats:  'spring_boot_mongodb_movies_service_cpu_usage'
-      receiver: 'webhook-receiver'
-    - match:
-        container_stats: 'spring_boot_mongodb_movies_service_cpu_usage'
-      receiver: 'webhook-receiver'
+    - receiver: 'webhook-receiver'
+      matchers:
+        - container_stats =~ "spring_boot_mongodb_movies_service_cpu_usage|spring_boot_solr_movies_search_service_cpu_usage"
+
+
 
 templates:
   - '/etc/alertmanager/templates/*.tmpl'
