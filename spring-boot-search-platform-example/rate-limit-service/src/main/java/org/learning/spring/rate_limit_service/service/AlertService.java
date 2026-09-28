@@ -23,15 +23,16 @@ public class AlertService {
         prometheusAlertRequestBody.getAlerts().forEach(alert -> {
             if (alert.getStatus().equals("firing")) {
 
-                reactiveRedisTemplate.opsForValue().set(alert.getLabels().getAlertName(), true, Duration.ofMinutes(4    )).subscribe(
-                        success -> LOGGER.warn("Enable rate limit for: {}", alert.getLabels().getAlertName()),
-                        error -> LOGGER.error("Error while trying to activate the rate limit for alert {}", alert.getLabels().getAlertName())
-                );
+                Boolean rateLimitEnabled = reactiveRedisTemplate.opsForValue().set(alert.getLabels().getAlertName(), true, Duration.ofMinutes(4))
+                        .block();
+
+               if (rateLimitEnabled != null && rateLimitEnabled){
+                   LOGGER.info("Enable rate limit for: {}", alert.getLabels().getAlertName());
+               }else{
+                   LOGGER.error("Error while trying to activate the rate limit for alert {}", alert.getLabels().getAlertName());
+               }
             } else if (alert.getStatus().equals("resolved")) {
-                reactiveRedisTemplate.delete(alert.getLabels().getAlertName()).subscribe(
-                        success -> LOGGER.info("Deactivate rate limit for alert: {}", alert.getLabels().getAlertName()),
-                        error -> LOGGER.error("Error while trying to deactivate the rate limit for alert {}", alert.getLabels().getAlertName())
-                );
+                LOGGER.info("Deactivate rate limit for alert: {}", alert.getLabels().getAlertName());
             }
         });
 
