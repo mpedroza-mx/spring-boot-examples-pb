@@ -4,12 +4,12 @@
   "metadata": {
     "name": "adrz595",
     "namespace": "default",
-    "uid": "6e48d118-cc50-4a27-8dba-cc8636909c00",
-    "resourceVersion": "1787413426947006",
-    "generation": 4,
-    "creationTimestamp": "2026-08-20T22:34:32Z",
+    "uid": "b0209f74-91f7-45f5-86e0-a44d2181b9ae",
+    "resourceVersion": "1790375067481988",
+    "generation": 10,
+    "creationTimestamp": "2026-09-25T21:53:28Z",
     "labels": {
-      "grafana.app/deprecatedInternalID": "897964813168640"
+      "grafana.app/deprecatedInternalID": "422794567573504"
     },
     "annotations": {
       "grafana.app/createdBy": "access-policy:service",
@@ -17,12 +17,12 @@
       "grafana.app/managedBy": "classic-file-provisioning",
       "grafana.app/managerAllowsEdits": "true",
       "grafana.app/managerId": "default",
-      "grafana.app/saved-from-ui": "Grafana v13.0.7 (392e53a167)",
-      "grafana.app/sourceChecksum": "d154ca682554b673491e9d30e689c0dc",
+      "grafana.app/saved-from-ui": "Grafana v13.0.9 (0b30eb6c90)",
+      "grafana.app/sourceChecksum": "5dd563c2c29df5c421dfbeff285ef068",
       "grafana.app/sourcePath": "/var/lib/grafana/dashboards/Search_Platform_Components.json",
-      "grafana.app/sourceTimestamp": "1787265038000",
-      "grafana.app/updatedBy": "user:ffvskkl3zhngga",
-      "grafana.app/updatedTimestamp": "2026-08-22T15:43:46Z"
+      "grafana.app/sourceTimestamp": "1790366582000",
+      "grafana.app/updatedBy": "user:dfzcxbfcow000b",
+      "grafana.app/updatedTimestamp": "2026-09-25T22:24:27Z"
     }
   },
   "spec": {
@@ -90,7 +90,7 @@
           "vizConfig": {
             "kind": "VizConfig",
             "group": "stat",
-            "version": "13.0.7",
+            "version": "13.0.9",
             "spec": {
               "options": {
                 "colorMode": "value",
@@ -197,7 +197,7 @@
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
-            "version": "13.0.7",
+            "version": "13.0.9",
             "spec": {
               "options": {
                 "annotations": {
@@ -219,6 +219,344 @@
               "fieldConfig": {
                 "defaults": {
                   "unit": "percentunit",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-14": {
+        "kind": "Panel",
+        "spec": {
+          "id": 14,
+          "title": "Movies Service",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "PBFA97CFB590B2093"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "up{job=\"spring_boot_mongodb_movies_service\"}",
+                        "legendFormat": "__auto",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.9",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "mappings": [
+                    {
+                      "type": "value",
+                      "options": {
+                        "0": {
+                          "text": "DOWN",
+                          "color": "dark-red",
+                          "index": 1
+                        },
+                        "1": {
+                          "text": "UP",
+                          "color": "dark-green",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-15": {
+        "kind": "Panel",
+        "spec": {
+          "id": 15,
+          "title": "Requests Rate Movies Search Service",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "PBFA97CFB590B2093"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum by(instance) (rate(http_server_requests_seconds_count{uri=\"/api/movies\"}[1m]))",
+                        "legendFormat": "{{instance}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.9",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-16": {
+        "kind": "Panel",
+        "spec": {
+          "id": 16,
+          "title": "CPU Usage - Movies Service",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "PBFA97CFB590B2093"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sum(rate(podman_container_cpu_seconds_total[30s])) by (id) * 100 * on(id) podman_container_info{name=\"spring-boot-search-platform-example-spring-boot-mongodb-movies-service-1\"}",
+                        "legendFormat": "spring-boot-mongodb-movies-service",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.9",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percent",
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -316,7 +654,7 @@
           "vizConfig": {
             "kind": "VizConfig",
             "group": "stat",
-            "version": "13.0.7",
+            "version": "13.0.9",
             "spec": {
               "options": {
                 "colorMode": "value",
@@ -413,7 +751,7 @@
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
-            "version": "13.0.7",
+            "version": "13.0.9",
             "spec": {
               "options": {
                 "annotations": {
@@ -532,7 +870,7 @@
           "vizConfig": {
             "kind": "VizConfig",
             "group": "stat",
-            "version": "13.0.7",
+            "version": "13.0.9",
             "spec": {
               "options": {
                 "colorMode": "value",
@@ -595,8 +933,8 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "process_cpu_usage{instance=\"spring-boot-solr-movies-search-service:6060\"}",
-                        "legendFormat": "{{instance}}",
+                        "expr": "sum(rate(podman_container_cpu_seconds_total[30s])) by (id) * 100 * on(id) podman_container_info{name=\"spring-boot-search-platform-example-spring-boot-solr-movies-search-service-1\"}",
+                        "legendFormat": "spring-boot-solr-movies-search-service",
                         "range": true
                       }
                     },
@@ -612,7 +950,7 @@
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
-            "version": "13.0.7",
+            "version": "13.0.9",
             "spec": {
               "options": {
                 "annotations": {
@@ -633,7 +971,7 @@
               },
               "fieldConfig": {
                 "defaults": {
-                  "unit": "percentunit",
+                  "unit": "percent",
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -731,7 +1069,7 @@
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
-            "version": "13.0.7",
+            "version": "13.0.9",
             "spec": {
               "options": {
                 "annotations": {
@@ -850,7 +1188,7 @@
           "vizConfig": {
             "kind": "VizConfig",
             "group": "timeseries",
-            "version": "13.0.7",
+            "version": "13.0.9",
             "spec": {
               "options": {
                 "annotations": {
@@ -1037,6 +1375,49 @@
                 }
               }
             }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "title": "Movie Service",
+              "layout": {
+                "kind": "AutoGridLayout",
+                "spec": {
+                  "maxColumnCount": 3,
+                  "columnWidthMode": "standard",
+                  "rowHeightMode": "standard",
+                  "items": [
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-14"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-15"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-16"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           }
         ]
       }
@@ -1047,7 +1428,7 @@
     "tags": [],
     "timeSettings": {
       "timezone": "browser",
-      "from": "now-5m",
+      "from": "now-15m",
       "to": "now",
       "autoRefresh": "",
       "autoRefreshIntervals": [
