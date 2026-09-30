@@ -11,5 +11,6 @@ public class AppProperties {
     private String kafkaTopic;
     private String ollamaUrl;
     private boolean semanticSearchEnabled;
+    private boolean simulatedErrorEnabled;
 
 }
