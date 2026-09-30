@@ -144,9 +144,16 @@ services:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:4005
     networks:
       - search_network
+    healthcheck:
+      test: [ "CMD-SHELL",
+              "curl 'http://localhost:7070/actuator/health' | grep '\"status\":\"UP\"' > /dev/null || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     depends_on:
-      kafka-ui:
-        condition: service_started
+      mongodb:
+        condition: service_healthy
       connector-init:
         condition: service_completed_successfully
 
@@ -164,8 +171,16 @@ services:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
       - SEMANTIC_SEARCH_ENABLED=${SEMANTIC_SEARCH_ENABLED:-false}
       - OLLAMA_URL=http://ollama:11434
+      - SIMULATED_ERROR_ENABLED=${SIMULATED_ERROR_ENABLED:-false}
     networks:
       - search_network
+    healthcheck:
+      test: [ "CMD-SHELL",
+              "curl 'http://localhost:8081/actuator/health' | grep '\"status\":\"UP\"' > /dev/null || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     depends_on:
       solr:
         condition: service_healthy
@@ -183,11 +198,17 @@ services:
       - SEMANTIC_SEARCH_ENABLED=${SEMANTIC_SEARCH_ENABLED:-false}
     networks:
       - search_network
+    healthcheck:
+      test: [ "CMD-SHELL",
+              "curl 'http://localhost:6060/actuator/health' | grep '\"status\":\"UP\"' > /dev/null || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     depends_on:
       solr:
         condition: service_healthy
-      connector-init:
-        condition: service_completed_successfully
+
 
 
   prometheus:
@@ -206,11 +227,6 @@ services:
       - prom_data:/prometheus
     networks:
       - search_network
-    depends_on:
-      solr:
-        condition: service_healthy
-      spring-boot-solr-movies-search-service:
-        condition: service_started
 
 
   grafana:
@@ -271,19 +287,23 @@ services:
       - LOAD_TEST
     working_dir: /tests
     volumes:
-      - ./jmeter/loadTestFiles:/tests
+      - ./jmeter/loadTestFiles:/tests:Z
     networks:
       - search_network
     entrypoint: [ "/bin/sh", "-c" ]
     command: >
       "rm -f /tests/results.jtl &&
       rm -rf /tests/html-report &&
-      jmeter -n
+      jmeter 
+      -Jjmeter.save.saveservice.response_code=true
+      -Jjmeter.save.saveservice.response_message=true
+      -Jjmeter.save.saveservice.response_successful=true
+      -n
       -t /tests/SearchPlatformLoadTest.jmx
       -l /tests/results.jtl
       -e -o /tests/html-report"
     depends_on:
-      alertmanager:
+      openresty:
         condition: service_started
 
   ollama:
@@ -391,8 +411,10 @@ services:
       valkey:
         condition: service_started
       spring-boot-mongodb-movies-service:
-        condition: service_started
+        condition: service_healthy
       spring-boot-solr-movies-search-service:
+        condition: service_healthy
+      podman-exporter:
         condition: service_started
 
 volumes:
