@@ -91,7 +91,7 @@ public class MessageListener {
             }
         });
 
-        if (counter.getAndIncrement() % 2 == 0 && MOVIE_CREATED_EVENT.equals(eventType)) {
+        if (counter.getAndIncrement() % 2 == 0 && MOVIE_CREATED_EVENT.equals(eventType) && appProperties.isSimulatedErrorEnabled()) {
             throw new RuntimeException("Force to message redelivery");
         }
     }
