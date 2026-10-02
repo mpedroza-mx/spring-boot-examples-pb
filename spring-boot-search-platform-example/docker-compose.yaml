@@ -371,7 +371,7 @@ services:
     container_name: podman-exporter
     image: quay.io/navidys/prometheus-podman-exporter:v2.0.0
     security_opt:
-      - label=disable
+      - "label=type:container_runtime_t"
     userns_mode: keep-id
     ports:
       - "9882:9882"
@@ -379,7 +379,7 @@ services:
       - CONTAINER_HOST=unix:///run/user/501/podman/podman.sock
       - HOME=/tmp
     volumes:
-      - /run/user/501/podman/podman.sock:/run/user/501/podman/podman.sock
+      - /run/user/501/podman/podman.sock:/run/user/501/podman/podman.sock:ro
     networks:
       - search_network
 
